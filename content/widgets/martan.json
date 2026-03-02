@@ -1,0 +1,43 @@
+{
+  "pkg": "@ecomplus/widget-martan",
+  "active": false,
+  "options": {
+    "store_id": "",
+    "web_id": "",
+    "widget_rating": {
+      "is_enabled": false,
+      "font_size": 15,
+      "star_color": "#ff00bc",
+      "display": "always",
+      "theme": "normal",
+      "search_page": false
+    },
+    "widget_review": {
+      "is_enabled": false,
+      "title": "Avaliações dos Clientes",
+      "star_color": "#ff00bc",
+      "header_layout": "header-minimal",
+      "reviews_layout": "list-expanded"
+    },
+    "widget_questions": {
+      "is_enabled": false,
+      "title": "Perguntas e respostas",
+      "enable_new_questions": true
+    },
+    "widget_key": "",
+    "widget_snippet": {
+      "border": true,
+      "border_color": "#eee",
+      "is_enabled": false,
+      "background_color": "#fff",
+      "text_color": "#0e0e0e",
+      "star_color": "#ff00bc"
+    }
+  },
+  "productDescriptionAppend": "src/append/product-block",
+  "productCardSlots": "src/append/product-card-slots",
+  "productSlots": "src/append/product-slots",
+  "headAppend": "src/append/head",
+  "bodyAppend": "src/append/body",
+  "stampsAppend": "src/append/stamps"
+}
