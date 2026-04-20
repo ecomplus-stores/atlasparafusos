@@ -1,0 +1,305 @@
+<div
+  class="product-card"
+  :class="{
+    'product-card--inactive': body._id && !isActive,
+    'product-card--small': isSmall,
+    'product-card--table': isTableLayout
+  }"
+  @mouseover="isHovered = true"
+  :data-product-id="body._id"
+  :data-sku="body.sku"
+>
+  <transition :enter-active-class="transitionClass">
+    <section v-if="!isLoading && !isTableLayout">
+      <slot
+        name="discount-tag"
+        v-bind="{ discount }"
+      >
+        <span
+          v-if="isActive && discount > 0"
+          class="product-card__offer-stamp"
+        >
+          <i class="i-arrow-down"></i> <b>{{ discount }}</b>%
+        </span>
+      </slot>
+
+      <slot name="stamps">
+        <div v-if="validStamps.length" class="product-card__stamps">
+          <span
+            v-for="(stamp, i) in validStamps"
+            :key="`s-${i}`"
+            :class="'product-card__stamps-' +
+              + `${(stamp.id || '').toLowerCase().replace(/\s/g, '-')}`"
+          >
+            <img :src="stamp.img" :alt="stamp.id">
+          </span>
+        </div>
+      </slot>
+
+      <slot name="body">
+        <a-link
+          class="product-card__link"
+          :href="`/${body.slug}`"
+          :title="name"
+        >
+          <slot name="header"/>
+
+          <div class="product-card__pictures">
+            <template v-if="body.pictures && body.pictures.length">
+              <a-picture
+                class="product-card__picture"
+                v-for="(picture, index) in body.pictures.slice(0, 2).reverse()"
+                v-if="body.pictures.length === 1 || index === 1 || isHovered"
+                :key="index"
+                :src="picture"
+                :can-calc-height="false"
+              />
+            </template>
+            <a-picture
+              v-else
+              class="product-card__picture"
+            />
+          </div>
+
+          <slot name="title">
+            <component
+              :is="headingTag"
+              class="product-card__name"
+            >
+              {{ name }}
+            </component>
+          </slot>
+        </a-link>
+      </slot>
+
+      <slot name="rating">
+        <div
+          v-once
+          class="product-card__rating"
+          :data-sku="body.sku"
+          v-html="ratingHtml"
+        ></div>
+      </slot>
+
+      <slot
+        name="unavailable"
+        v-if="!body.available || !body.visible"
+      >
+        <p class="badge badge-warning mt-auto">
+          {{ i19unavailable }}
+        </p>
+      </slot>
+
+      <slot
+        name="out-of-stock"
+        v-else-if="!isInStock"
+      >
+        <p class="badge badge-dark mt-auto">
+          {{ i19outOfStock }}
+        </p>
+      </slot>
+
+      <slot
+        name="without-price"
+        v-else-if="isWithoutPrice"
+      >
+        <p class="badge badge-info mt-auto">
+          {{ i19uponRequest }}
+        </p>
+      </slot>
+
+      <template v-else>
+        <slot name="prices">
+          <a-prices
+            class="product-card__prices"
+            :product="body"
+            :installments-option="installmentsOption"
+            :discount-option="discountOption"
+          />
+        </slot>
+
+        <div
+          @click="buy"
+          class="product-card__buy fade"
+        >
+          <slot name="buy">
+            <div
+              v-if="buyHtml"
+              v-html="buyHtml"
+            ></div>
+
+            <button
+              type="button"
+              class="btn btn-primary"
+              :class="isSmall ? 'btn-sm': 'btn-block'"
+              :disabled="isWaitingBuy"
+            >
+              <span
+                v-if="isWaitingBuy"
+                class="product-card__buy-loading spinner-grow spinner-grow-sm"
+                role="status"
+              >
+                <span class="sr-only">Loading...</span>
+              </span>
+
+              <slot name="buy-button-content">
+                <i class="i-shopping-bag mr-1"></i>
+                {{ strBuy }}
+              </slot>
+            </button>
+          </slot>
+        </div>
+      </template>      
+      
+      <slot name="favorite">
+        <a 
+          class="btn product-card__favorite fade"
+          @click="toggleFavorite"
+          :href="isLogged ? null : accountUrl"
+          :aria-label="i19addToFavorites"
+        >
+          <i 
+            class="i-heart mr-1"
+            :class="isFavorite ? 'active' : null"
+          >
+          </i>
+        </a>
+      </slot>
+
+      <slot name="footer">
+        <div
+          v-if="footerHtml"
+          v-html="footerHtml"
+        ></div>
+      </slot>
+    </section>
+
+    <section v-if="!isLoading && isTableLayout">
+      
+      <div class="product-card__table-row">
+        <div class="product-card__table-cell product-card__table-cell--code">
+          <a-link
+            :href="`/${body.slug}`"
+            :title="name"
+          >
+            {{ body.sku }}
+          </a-link>
+        </div>
+        <div class="product-card__table-cell product-card__table-cell--image">
+          <a-picture
+            v-if="body.pictures && body.pictures.length"
+            :src="body.pictures[0]"
+            :can-calc-height="false"
+          />
+        </div>
+        <div class="product-card__table-cell product-card__table-cell--name">
+          <div class="d-flex flex-column">
+          <a-link
+            :href="`/${body.slug}`"
+            :title="name"
+          >
+            {{ name }}
+          </a-link>
+          <div v-if="validStamps.length" class="product-card__stamps">
+            <span
+              v-for="(stamp, i) in validStamps"
+              :key="`s-${i}`"
+              :class="'product-card__stamps-' + `${(stamp.id || '').toLowerCase().replace(/\s/g, '-')}`"
+            >
+              <img :src="stamp.img" :alt="stamp.id">
+            </span>
+          </div>
+           <div class="product-card__table-cell--variation">
+            <select
+              v-if="body.variations && body.variations.length"
+              @change="selectVariation($event.target.value)"
+              class="form-control form-control-sm"
+            >
+              <option value="">Selecione uma variação</option>
+              <option
+                v-for="variation in body.variations"
+                :key="variation._id"
+                :value="variation._id"
+                :selected="selectedVariationId === variation._id"
+              >
+                {{ variation.name.replace(body.name + ' / ', '').trim() || variation.sku }}
+              </option>
+            </select>
+          </div>
+          </div>
+        </div>
+       
+        <div class="product-card__table-cell product-card__table-cell--prices progressive-discount-table">
+            <div class="progressive-discount-table__grid">
+              <div
+                v-for="tier in progressivePriceTiers"
+                :key="tier.quantity"
+                class="progressive-discount-table__block"
+                :class="{ 'is-active': tableQty >= tier.quantity }"
+              >
+                <span class="progressive-discount-table__qty">
+                  {{ tier.quantity === 1 ? 'Peça Avulsa' : tier.quantity + '+ un.' }}
+                </span>
+                <strong class="progressive-discount-table__value">
+                  {{ formatMoney(tier.price) }}
+                </strong>
+              </div>
+            </div>
+          </div>
+        <div class="product-card__table-cell product-card__table-cell--buy">
+          <div class="product-card__buy-section">
+            <div class="product-card__quantity-row">
+              <label class="product-card__quantity-label">
+                Quantidade:
+                <input
+                  type="number"
+                  class="form-control form-control-sm product-card__quantity-input"
+                  v-model.number="tableQty"
+                  min="1"
+                  :max="body.quantity || 999"
+                >
+              </label>
+              <div class="product-card__price-display">
+                <div class="product-card__unit-price">
+                  {{ formatMoney(currentTablePrice) }} /un.
+                </div>
+                <div class="product-card__total-price">
+                  Total: {{ formatMoney(currentTableTotal) }}
+                </div>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="btn btn-primary btn-block product-card__buy-button"
+              :disabled="isWaitingBuy"
+              @click="buy()"
+            >
+              <span
+                v-if="isWaitingBuy"
+                class="spinner-grow spinner-grow-sm"
+                role="status"
+              >
+                <span class="sr-only">Loading...</span>
+              </span>
+              <i v-else class="i-shopping-bag mr-1"></i>
+              {{ strBuy }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </transition>
+
+  <template v-if="isLoading">
+    <slot/>
+    <div
+      v-if="error"
+      class="alert alert-warning small"
+      role="alert"
+    >
+      {{ error }}
+    </div>
+  </template>
+
+  <div ref="quickview"></div>
+</div>

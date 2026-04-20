@@ -3,8 +3,12 @@
   "active": true,
   "desktopOnly": false,
   "options": {
-    "buyText": "",
+    "buyText": "Comprar",
     "buy": "",
-    "footer": ""
+    "footer": "",
+    "tableCategories": [
+      "parafusos"
+    ],
+    "tableLayoutExclude": false
   }
 }

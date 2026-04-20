@@ -1,0 +1,123 @@
+<div
+  class="prices"
+  :class="{ 'prices--literal': isLiteral, 'prices--big': isBig }"
+>
+  <span
+    v-if="comparePrice"
+    class="prices__compare"
+  >
+    <template v-if="isLiteral">
+     
+      <s>{{ formatMoney(comparePrice) }}</s>
+     
+    </template>
+    <s v-else>{{ formatMoney(comparePrice) }}</s>
+  </span>
+
+   <span
+    v-if="progressiveDiscountInfo && !comparePrice"
+    class="prices__compare"
+  >
+    <template v-if="isLiteral && !comparePrice">
+     
+      <s>{{ formatMoney(price) }}</s>
+     
+    </template>
+    <s v-else>{{ formatMoney(price) }}</s>
+  </span>
+
+  <div
+    key="discount"
+    v-if="typeof priceWithDiscount === 'number' && priceWithDiscount < finalPrice"
+    class="prices__discount"
+  >
+    <template v-if="typeof discountLabel === 'string' && discountLabel">
+      <span>
+        {{ formatMoney(priceWithDiscount) }}
+      </span>
+      <small class="prices__discount-label">
+        {{ discountLabel }}
+      </small>
+    </template>
+
+    <template v-else>
+      <small>
+        {{ i19asOf }}
+      </small>
+      <span>
+        {{ formatMoney(priceWithDiscount) }}
+      </span>
+    </template>
+
+    <span
+      v-if="progressiveDiscount > 0 || paymentDiscountPercentage > 0"
+      class="prices__progressive-tag ml-2"
+      title="Desconto total (progressivo + pagamento)"
+    >
+      <template v-if="progressiveDiscount > 0 && paymentDiscountPercentage > 0">
+        <b>{{ progressiveDiscount }}% + {{ paymentDiscountPercentage }}% OFF</b>
+      </template>
+      <template v-else-if="progressiveDiscount > 0">
+        <b>{{ progressiveDiscount }}% OFF</b>
+      </template>
+      <template v-else>
+        <b>{{ paymentDiscountPercentage }}% OFF</b>
+      </template>
+    </span>
+  </div>
+ 
+
+  <strong class="prices__value d-flex align-items-center">
+    <small v-if="hasVariedPrices">
+      {{ i19asOf }}
+    </small>
+    {{ formatMoney(finalPrice) }}
+
+    <span
+    v-if="totalDiscountValue > 0"
+    class="prices__discount-tag ml-3"
+    title="Desconto total (pagamento + progressivo)"
+  >
+    
+  </span>
+  </strong>
+
+  
+
+  <transition-group enter-active-class="animated slideInDown">
+    <div
+      key="points"
+      v-if="earnPointsFactor > 0 && !(pointsMinPrice > finalPrice)"
+      class="prices__points"
+    >
+      <i class="i-check-circle"></i>
+      {{ i19youEarn }}
+      <span>
+        +{{ (earnPointsFactor * finalPrice).toFixed(1) }}
+      </span>
+      <em>{{ pointsProgramName }}</em>
+    </div>
+
+    <div
+      key="installments"
+      v-if="installmentsNumber > 1 && installmentValue"
+      class="prices__installments"
+    >
+      <small v-if="isLiteral">
+        {{ i19upTo }}
+      </small>
+      {{ installmentsNumber }}x
+      <small v-if="isLiteral">
+        {{ i19of }}
+      </small>
+      <span>
+        {{ formatMoney(installmentValue) }}
+      </span>
+      <small v-if="!monthlyInterest && isLiteral">
+        {{ i19interestFree }}
+      </small>
+    </div>
+
+    
+  </transition-group>
+</div>

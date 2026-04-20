@@ -7,11 +7,11 @@
   "menu_all_departments": true,
   "centralized_logo": false,
   "marketing_stripe": {
-    "text": "Aproveite nossos descontos de até 50%!",
+    "text": "",
     "link": "/promotion"
   },
   "alphabetical_order_submenu": true,
-  "name_all_departments": "Categorias",
+  "name_all_departments": "Departamentos",
   "search_input": true,
   "desktop_megamenu": true,
   "full_width_submenu": true,

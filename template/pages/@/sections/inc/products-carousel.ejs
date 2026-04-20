@@ -48,12 +48,19 @@
       class="glide"
       data-wait-mutation="true"
       data-autoplay="<%= opt.autoplay %>"
-      data-per-view="4"
-      data-per-view-md="3"
+      data-per-view="5"
+      data-per-view-md="4"
       data-per-view-sm="2"
     >
       <div class="glide__track" data-glide-el="track">
         <ul class="glide__slides products-carousel__list">
+          <% for (let i = 0; i < opt.items.length; i++) { %>
+            <li class="glide__slide products-carousel__item">
+              <%- await include('@/sections/inc/product-item', {
+                _, opt: { item: opt.items[i] }
+              }) %>
+            </li>
+          <% } %>
           <% for (let i = 0; i < opt.items.length; i++) { %>
             <li class="glide__slide products-carousel__item">
               <%- await include('@/sections/inc/product-item', {

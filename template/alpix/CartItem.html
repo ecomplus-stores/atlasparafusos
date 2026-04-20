@@ -1,0 +1,152 @@
+<section
+  class="cart-item"
+  :class="isFreebie ? 'cart-item--freebie' : null"
+>
+  <div class="cart-item__container">
+    <div class="cart-item__thumb">
+      <component
+        v-if="img"
+        :is="item.slug ? 'a-link' : 'span'"
+        :href="`/${item.slug}`"
+      >
+        <a-picture
+          :src="img.url"
+          :alt="img.alt || item.name"
+        />
+      </component>
+    </div>
+
+    <div class="cart-item__info">
+      <div class="d-flex justify-content-between align-items-start w-100">
+        <div>
+            <span
+          v-if="isFreebie"
+          class="cart-item__freebie"
+        >
+          <i class="i-gift mr-1"></i>
+          {{ i19freebie }}
+        </span>
+
+        <div
+          class="cart-item__name"
+          :title="item.name"
+        >
+          <a-link
+            v-if="item.slug"
+            :href="`/${item.slug}`"
+          >
+            {{ item.name }}
+          </a-link>
+          <template v-else>
+            {{ item.name }}
+          </template>
+
+          <small
+            class="cart-item__name-subtitle"
+            v-if="item.kit_product"
+          >
+            {{ formatName(item.kit_product.name) }}
+          </small>
+        </div>
+
+        <small class="cart-item__stock">
+          Estoque:
+          <strong v-if="maxQuantity === 0">{{ i19outOfStock }}</strong>
+          <strong v-else>Disponível</strong>
+        </small>
+
+        <item-customizations
+          :item="item"
+          class="cart-item__customizations"
+        />
+        </div>
+        <div>
+          <div class="cart-item__actions">
+            <template v-if="maxQuantity > 0">
+              <strong v-if="item.kit_product || item.keep_item_quantity" class="cart-item__qty-fixed">
+                {{ quantity }}x
+              </strong>
+
+              <div
+                v-else
+                class="cart-item__qty-stepper"
+                :title="i19quantity"
+              >
+                <button
+                  type="button"
+                  class="cart-item__qty-btn"
+                  :disabled="quantity <= minQuantity"
+                  @click="quantity > minQuantity && quantity--"
+                >−</button>
+                <span class="cart-item__qty-value">{{ quantity }}</span>
+                <button
+                  type="button"
+                  class="cart-item__qty-btn"
+                  :disabled="quantity >= maxQuantity"
+                  @click="quantity < maxQuantity && quantity++"
+                >+</button>
+              </div>
+            </template>
+
+            <button
+              v-if="!isFreebie"
+              type="button"
+              class="cart-item__remove"
+              :title="i19remove"
+              @click="remove"
+            >
+              Remover
+            </button>
+          </div>
+        </div>
+      </div>
+    
+
+      <div
+        v-if="!isFreebie || price > 0"
+        class="cart-item__prices"
+      >
+        <small
+          v-if="item.price && item.final_price && item.final_price < item.price"
+          class="cart-item__price-original"
+        >
+          {{ formatMoney(item.price) }}
+        </small>
+        <div>
+          <div
+            class="cart-item__price-un fade"
+            :class="{ show: quantity > 1 }"
+          >
+            <template v-if="discountRule">
+              <s>{{ formatMoney(price) }}</s>
+              <strong class="cart-item__price-un--discounted">{{ formatMoney(discountedUnitPrice) }}</strong>
+            </template>
+            <template v-else>{{ formatMoney(price) }}</template>
+            <small>/un</small>
+          </div>
+
+          <div class="d-flex align-items-center">
+            <s v-if="discountRule" class="cart-item__price-total-original mr-1">{{ formatMoney(price * quantity) }}</s>
+            <strong class="cart-item__price-current">{{ formatMoney((price * quantity) - totalDiscount) }}</strong>
+          </div>
+        </div>
+        <div v-if="parsedFlags.length" class="cart-item__discount-blocks">
+          <div
+            v-for="flag in parsedFlags"
+            :key="flag.quantity"
+            class="cart-item__discount-block"
+            :class="{ 'is-active': quantity >= flag.quantity }"
+          >
+            <span class="cart-item__discount-block__qty">+{{ flag.quantity }}/un</span>
+            <strong class="cart-item__discount-block__value">
+              {{ formatMoney(flag.price) }}/un
+            </strong>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+  </div>
+</section>

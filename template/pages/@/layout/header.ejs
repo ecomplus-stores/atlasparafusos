@@ -73,8 +73,8 @@ const hasAllDepartments = header.menu_all_departments
     <% } %>
   <% } %>
 
-  <div class="top-bar__nav d-none d-md-block">
-    <div class="container-fluid">
+  <div class="top-bar__nav d-none d-md-none">
+    <div class="container">
       <div class="row">
         <div class="col d-flex">
           <nav class="top-bar__page-links">
@@ -122,7 +122,7 @@ const hasAllDepartments = header.menu_all_departments
 </div>
 
 <header class="header" id="header">
-  <div class="header__container container-fluid">
+  <div class="header__container container">
     <div class="header__row row<%= isCentralizedLogo ? ' header__row--centralized-logo' : '' %><%= isCentralizedLogo && isCategoriesNavFull ? ' header__row--full-width' : '' %>">
       <div class="col-auto p-0 header__toggler-block">
         <button
@@ -163,7 +163,9 @@ const hasAllDepartments = header.menu_all_departments
             aria-controls="search-bar"
             title="<%= _.dictionary('searchProducts') %>"
           >
-            <i class="i-search"></i>
+            <span class="ico">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><circle cx="112" cy="112" r="80" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"/><line x1="168.57" y1="168.57" x2="224" y2="224" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"/></svg>
+            </span>
           </button>
 
           <a
@@ -173,7 +175,9 @@ const hasAllDepartments = header.menu_all_departments
             href="/app/#/account/"
             title="<%= _.dictionary('myAccount') %>"
           >
-            <i class="i-user"></i>
+            <span class="ico">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><circle cx="128" cy="96" r="64" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"/><path d="M32,216c19.37-33.47,54.55-56,96-56s76.63,22.53,96,56" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"/></svg>
+            </span>
           </a>
           <a
             id="cart-button"
@@ -182,7 +186,9 @@ const hasAllDepartments = header.menu_all_departments
             href="/app/#/cart"
             title="<%= _.dictionary('openCart') %>"
           >
-            <i class="i-shopping-bag"></i>
+            <span class="ico">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><path d="M16,32H40L76.75,164.28A16,16,0,0,0,92.16,176H191a16,16,0,0,0,15.42-11.72L232,72H51.11" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"/><circle cx="88" cy="216" r="14"/><circle cx="192" cy="216" r="14"/></svg>
+            </span>
             <span id="cart-count" class="badge badge-primary"></span>
           </a>
         </div>
@@ -227,7 +233,8 @@ const hasAllDepartments = header.menu_all_departments
               class="header__search-btn"
               aria-label="<%= _.dictionary('searchProducts') %>"
             >
-              <i class="i-search"></i>
+              <span class="ico">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><circle cx="112" cy="112" r="80" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"/><line x1="168.57" y1="168.57" x2="224" y2="224" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"/></svg></span>
             </button>
             <div id="instant-search">
               <!--
@@ -280,37 +287,25 @@ const hasAllDepartments = header.menu_all_departments
                 >
                   <%= header.name_all_departments || _.dictionary('all') %>
                 </a>
-                <nav class="header__submenu header__submenu--full" id="s-all">
-                  <div class="row">
-                    <% _.categories.forEach(({ name, slug, parent, _id }) => { %>
-                      <% if (!parent) { 
-                        %>
-                        <div class="col-12 col-lg-<%- isCategoriesNavFull ? '2' : '4' %>">
-                          <a 
-                            id="sd-all-<%= _id %>" 
-                            href="/<%= slug %>"
-                          >
-                            <%= name %>
+                <nav class="header__submenu" id="s-all">
+                  <% _.categories.forEach(({ name, slug, parent, _id }) => { %>
+                    <% if (!parent || !parent.slug) { %>
+                      <% const subcategories = _.categories.filter(({ parent: p }) => p && p.slug === slug) %>
+                      <div class="header__submenu-item<%= subcategories.length ? ' header__submenu-item--has-children' : '' %>">
+                        <a id="sd-all-<%= _id %>" href="/<%= slug %>"><%= name %>
+                          <%- subcategories.length ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#000000" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path></svg>' : '' %>
                           </a>
-                        <% const subcategories = _.categories.filter(({ parent }) => parent && parent.slug === slug) %>
                         <% if (subcategories.length) { %>
-                          <div id="header__submenu-<%= slug %>">
-                            <ul class="header__links">
-                              <% subcategories.forEach(subcategory => { %>
-                                <li>
-                                  <a id="td-all-<%= subcategory._id %>" class="header__submenu-subcategory" href="/<%= subcategory.slug %>">
-                                    <%= subcategory.name %>
-                                  </a>
-                                </li>
-                                <% }) %>
-                              </ul>
-                            </div>
-                          <% } %>
-                          </div>
+                          <nav class="header__submenu-flyout">
+                            <% subcategories.forEach(subcategory => { %>
+                              <a id="td-all-<%= subcategory._id %>" href="/<%= subcategory.slug %>"><%= subcategory.name %></a>
+                            <% }) %>
+                          </nav>
                         <% } %>
-                      <% }) %>
-                    </div>
-                  </nav>
+                      </div>
+                    <% } %>
+                  <% }) %>
+                </nav>
               </div>
             <% } %>
             <% categories.forEach(({ slug, name, _id}) => { %>
@@ -337,23 +332,27 @@ const hasAllDepartments = header.menu_all_departments
                         })
                       }
                     %>
-                    <nav class="header__submenu<%= fullWidthSubmenu ? ' header__submenu--full' : '' %>" id="<%= `s-${slug.replace(/\//g, '_')}` %>">
+                    <nav class="header__submenu" id="<%= `s-${slug.replace(/\//g, '_')}` %>">
                       <% subcategories.forEach(subcategory => { %>
-                        <div>               
-                          <a id="sd-<%= subcategory._id %>" href="/<%= subcategory.slug %>"><%= subcategory.name %></a>
-                          <% const thirdCategories = _.categories.filter(({ parent }) => parent && parent.slug === subcategory.slug) %>
-                          <%
-                            if (isAlphabeticalOrderSubmenu) {
-                              thirdCategories.sort((a, b)=> {
-                                return b.name > a.name ? -1 : 1
-                              })
-                            }
-                          %>
-                          <% thirdCategories.forEach(thirdCategory => { %>
-                            <a id="td-<%= thirdCategory._id %>" class="header__submenu-subcategory" href="/<%= thirdCategory.slug %>">
-                              <%= thirdCategory.name %>
-                            </a>
-                          <% }) %>
+                        <% const thirdCategories = _.categories.filter(({ parent }) => parent && parent.slug === subcategory.slug) %>
+                        <%
+                          if (isAlphabeticalOrderSubmenu) {
+                            thirdCategories.sort((a, b)=> {
+                              return b.name > a.name ? -1 : 1
+                            })
+                          }
+                        %>
+                        <div class="header__submenu-item<%= thirdCategories.length ? ' header__submenu-item--has-children' : '' %>">
+                          <a id="sd-<%= subcategory._id %>" href="/<%= subcategory.slug %>"><%= subcategory.name %><%- thirdCategories.length ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#000000" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path></svg>' : '' %></a>
+                          <% if (thirdCategories.length) { %>
+                            <nav class="header__submenu-flyout">
+                              <% thirdCategories.forEach(thirdCategory => { %>
+                                <a id="td-<%= thirdCategory._id %>" href="/<%= thirdCategory.slug %>">
+                                  <%= thirdCategory.name %>
+                                </a>
+                              <% }) %>
+                            </nav>
+                          <% } %>
                         </div>
                       <% }) %>
                     </nav>
@@ -379,3 +378,5 @@ const hasAllDepartments = header.menu_all_departments
     </div>
   </div>
 <% } %> 
+
+<div id="menu-backshadow" class="fade"></div>

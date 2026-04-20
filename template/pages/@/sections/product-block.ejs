@@ -6,7 +6,7 @@ if (stamps && Array.isArray(stamps.stamps_list) && stamps.stamps_list.length) {
 }
 %>
 
-<div id="product-block" class="product-block my-4 mb-lg-5">
+<div id="product-block" class="product-block mt-3 mb-4 mb-lg-5">
   <div class="container">
     <section
       id="product"
@@ -23,7 +23,7 @@ if (stamps && Array.isArray(stamps.stamps_list) && stamps.stamps_list.length) {
       </div>
 
       <div class="row">
-        <div class="col-12 col-md-6 mb-4">
+        <div class="col-12 col-md-7 mb-4">
           <!-- Picture(s) gallery will be inserted dynamically within `TheProduct` -->
           <% if (_.state.pictures) { %>
             <% const imgObj = _.ecomUtils.img(_.state, null, 'big') %>
@@ -85,7 +85,8 @@ if (stamps && Array.isArray(stamps.stamps_list) && stamps.stamps_list.length) {
           <!-- Custom additional code on bottom of images gallery -->
         </div>
 
-        <div class="col">
+        <div class="col-md-5">
+          <div class="sticky-this">
           <h1 class="product__name">
             <%= _.ecomUtils.name(_.state) %>
           </h1>
@@ -162,7 +163,7 @@ if (stamps && Array.isArray(stamps.stamps_list) && stamps.stamps_list.length) {
                   <% } %>
                 >
                   <div data-slot="buy-button-content">
-                    <i class="i-shopping-bag mr-1"></i>
+                    
                     <% if (_.state.kit_composition && _.state.kit_composition.length) { %>
                       <%= _.dictionary('buyKit') %>
                     <% } else { %> 
@@ -179,11 +180,8 @@ if (stamps && Array.isArray(stamps.stamps_list) && stamps.stamps_list.length) {
             </div>
           </div>
 
-          <% if (_.state.short_description) { %>
-            <p class="product__info mt-3 lead">
-              <%= _.state.short_description %>
-            </p>
-          <% } %>
+          
+          </div>
         </div>
       </div>
 
@@ -197,7 +195,9 @@ if (stamps && Array.isArray(stamps.stamps_list) && stamps.stamps_list.length) {
     }) %>
   </div>
 </div>
+<script>
 
+</script>
 <%
 const productJsonLd = {
   '@context': 'http://schema.org',

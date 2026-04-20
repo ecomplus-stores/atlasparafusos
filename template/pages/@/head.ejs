@@ -30,6 +30,18 @@ if (maintenance.active) {
     })
   }
 </script>
+
+<%
+// inject product card table config
+const productCardWidget = _.cms('widgets/product-card') || {}
+const productCardOptions = productCardWidget.options || {}
+%>
+<script>
+  //window.productCardTableCategories = <%= JSON.parse(JSON.stringify(JSON.stringify(productCardOptions.tableCategories || []))) %>;
+  window.productCardTableCategories = ["parafusos"];
+  window.productCardTableLayoutExclude = <%= JSON.stringify(productCardOptions.tableLayoutExclude || false) %>;
+</script>
+
 <link rel="stylesheet" type="text/css" href="<%= _.assetsPrefix || '' %>/storefront.css">
 
 <%

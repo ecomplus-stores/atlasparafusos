@@ -1,0 +1,117 @@
+<div class="quantity-selector">
+  <div
+    v-if="openDropdownId"
+    class="quantity-selector__backdrop"
+    @click="openDropdownId = null"
+  ></div>
+
+  <div
+    class="quantity-selector__item"
+    v-for="item in items"
+  >
+    <div class="quantity-selector__row">
+      <span class="quantity-selector__qty-label">Quantidade:</span>
+
+      <div class="quantity-selector__dropdown-wrap">
+        <button
+          type="button"
+          class="quantity-selector__trigger"
+          :disabled="!checkInStock(item)"
+          @click="toggleDropdown(item._id)"
+        >
+          <strong>{{ selectedQnts[item._id] }} {{ selectedQnts[item._id] === 1 ? 'unidade' : 'unidades' }}</strong>
+          <i
+            class="quantity-selector__trigger-icon"
+            :class="openDropdownId === item._id ? 'i-chevron-up' : 'i-chevron-down'"
+          ></i>
+        </button>
+
+        <div
+          v-if="openDropdownId === item._id"
+          class="quantity-selector__panel"
+        >
+          <button
+            v-for="n in getPresets(item)"
+            :key="n"
+            type="button"
+            class="quantity-selector__option"
+            :class="{ 'is-selected': n === selectedQnts[item._id] }"
+            @click="selectPreset(item, n)"
+          >
+            {{ n }} {{ n === 1 ? 'unidade' : 'unidades' }}
+          </button>
+
+          <div class="quantity-selector__custom">
+            <label class="quantity-selector__custom-label">Quantidade:</label>
+            <div class="quantity-selector__custom-row">
+              <input
+                type="number"
+                min="1"
+                class="quantity-selector__custom-input"
+                v-model.number="customQnts[item._id]"
+                @keyup.enter="applyCustomQnt(item)"
+              />
+              <button
+                type="button"
+                class="quantity-selector__custom-apply"
+                @click="applyCustomQnt(item)"
+              >
+                Aplicar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <span class="quantity-selector__label">
+      <slot v-bind="{ item }">
+        <a-link
+          v-if="item.slug"
+          target="_blank"
+          :href="`/${item.slug}`"
+          :title="item.name"
+        >
+          {{ item.name }}
+        </a-link>
+        <template v-else>
+          {{ item.name }}
+        </template>
+      </slot>
+    </span>
+  </div>
+
+  <a-alert :can-show="hasMinAlert">
+    {{ i19minQuantity }}:
+    <strong>{{ min }}</strong>
+  </a-alert>
+
+  <a-alert
+    :can-show="hasMaxAlert"
+    :variant="alertVariant"
+  >
+    {{ i19maxQuantity }}:
+    <strong>{{ max }}</strong>
+  </a-alert>
+
+  <div
+    v-if="hasBuyButton"
+    class="quantity-selector__buy"
+  >
+    <slot
+      name="buy"
+      v-bind="{ selectedQnts, buy }"
+    >
+      <button
+        type="button"
+        class="btn btn-lg btn-primary my-3"
+        @click="buy"
+      >
+        <slot name="buy-button-content">
+          <i class="i-shopping-bag mr-1"></i>
+          {{ strBuy }}
+        </slot>
+      </button>
+    </slot>
+  </div>
+</div>
