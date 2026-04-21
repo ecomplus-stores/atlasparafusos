@@ -18,6 +18,10 @@ module.exports = () => ({
         './js/CartQuickview.js': path.resolve(__dirname, 'template/alpix/CartQuickview.js'),
          './html/ProductCard.html': path.resolve(__dirname, 'template/alpix/ProductCard.html'),
         './js/ProductCard.js': path.resolve(__dirname, 'template/alpix/ProductCard.js'),
+         './html/InstantSearch.html': path.resolve(__dirname, 'template/alpix/InstantSearch.html'),
+        './js/InstantSearch.js': path.resolve(__dirname, 'template/alpix/InstantSearch.js'),
+        // './html/EcCheckout.html': path.resolve(__dirname, 'template/alpix/EcCheckout.html'),   
+        // './js/EcCheckout.js': path.resolve(__dirname, 'template/alpix/EcCheckout.js'), 
     }
   }
 })

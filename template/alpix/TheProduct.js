@@ -165,6 +165,7 @@ export default {
       paymentOptions: [],
       customizations: [],
       kitItems: [],
+      localHasQuantitySelector: false,
       currentTimer: null
     }
   },
@@ -679,7 +680,7 @@ export default {
         }, 1000)
       }
     }
-    this.hasQuantitySelector = true
+    this.localHasQuantitySelector = true
   },
 
   destroyed () {

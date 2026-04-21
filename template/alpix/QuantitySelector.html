@@ -61,6 +61,59 @@
             </div>
           </div>
         </div>
+
+        <transition name="qs-slide-up">
+          <div
+            v-if="openDropdownId === item._id"
+            class="quantity-selector__mobile-sheet"
+          >
+            <div
+              class="quantity-selector__mobile-overlay"
+              @click="openDropdownId = null"
+            ></div>
+            <div class="quantity-selector__mobile-drawer">
+              <div class="quantity-selector__mobile-header">
+                <span class="quantity-selector__mobile-title">Escolha quantidade</span>
+                <button
+                  type="button"
+                  class="quantity-selector__mobile-close"
+                  @click="openDropdownId = null"
+                >&#10005;</button>
+              </div>
+              <div class="quantity-selector__mobile-list">
+                <button
+                  v-for="n in getPresets(item)"
+                  :key="n"
+                  type="button"
+                  class="quantity-selector__mobile-option"
+                  :class="{ 'is-selected': n === selectedQnts[item._id] }"
+                  @click="selectPreset(item, n)"
+                >
+                  {{ n }} {{ n === 1 ? 'unidade' : 'unidades' }}
+                </button>
+              </div>
+              <div class="quantity-selector__custom">
+                <label class="quantity-selector__custom-label">Quantidade:</label>
+                <div class="quantity-selector__custom-row">
+                  <input
+                    type="number"
+                    min="1"
+                    class="quantity-selector__custom-input"
+                    v-model.number="customQnts[item._id]"
+                    @keyup.enter="applyCustomQnt(item)"
+                  />
+                  <button
+                    type="button"
+                    class="quantity-selector__custom-apply"
+                    @click="applyCustomQnt(item)"
+                  >
+                    Aplicar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </transition>
       </div>
     </div>
 

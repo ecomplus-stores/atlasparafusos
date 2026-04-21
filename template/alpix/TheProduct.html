@@ -119,7 +119,7 @@
                   @fix-price="price => fixedPrice = price"
                 />
                 <div 
-                  v-if="(selectedVariationId && selectedVariation.flags) || (body.flags && !selectedVariationId)" 
+                  v-if="(selectedVariationId && selectedVariation.flags && selectedVariation.flags.length > 0) || (body.flags && body.flags.length > 0 && !selectedVariationId)" 
                   class="progressive-discount-table"
                 >
                   <p class="progressive-discount-table__title">Descontos progressivos:</p>
@@ -270,8 +270,8 @@
               >
               
                 <component
-                  :is="hasQuantitySelector ? 'quantity-selector' : 'div'"
-                  :items="hasQuantitySelector ? [{ _id: body._id, quantity: body.min_quantity || 1 }] : null"
+                  :is="localHasQuantitySelector ? 'quantity-selector' : 'div'"
+                  :items="localHasQuantitySelector ? [{ _id: body._id, quantity: body.min_quantity || 1 }] : null"
                   :min="body.min_quantity"
                   :max="body.quantity"
                   :has-buy-button="false"

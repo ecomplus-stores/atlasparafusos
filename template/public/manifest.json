@@ -1,0 +1,22 @@
+{
+  "name": "Atlas Parafusos",
+  "short_name": "Atlas Parafusos",
+  "description": "Atlas Parafusos, loja física desde 1999. Atua no Ramo de Parafusos e Ferramentas Especiais para industrias, construção civil, indústria alimentícia.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#131313",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "/img/uploads/a-4bgp9s7l7j.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/img/uploads/a-4bgp9s7l7j.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

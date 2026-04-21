@@ -38,16 +38,41 @@ if (mainCategories) {
 %>
 
 <aside id="menu" class="menu shadow">
+  <header class="card-header d-lg-none d-block">
+    <div class="row apx-side-heading">
+      <div class="col">
+        <span>Menu</span>
+      </div>
+      <div class="col-auto">
+        <button
+          type="button"
+          class="close"
+          onclick="toggleSidenav()"
+        >
+        
+        </button>
+      </div>
+    </div>
+  </header>
+  <div
+  class="menu-user"
+    title="<%= _.dictionary('myAccount') %>"
+  >
+     <span class="ico">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><circle cx="128" cy="96" r="64" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"/><path d="M32,216c19.37-33.47,54.55-56,96-56s76.63,22.53,96,56" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"/></svg>
+            </span>
+    <div class="d-flex flex-row">
+      <div>Olá, <span data-username>Visitante</span></div>
+      <div data-isLogged>
+        <a href="/app/#/account/">Minha conta</a> ou <a id="logout" href="#">sair</a>
+      </div>
+      <div data-isNotLogged>
+        <a href="/app/#/account/">Entre</a> ou <a href="/app/#/account/">cadastre-se</a>
+      </div>
+    </div>
+  </div>
   <nav class="accordion" id="accordion-menu">
-    <button
-      class="menu__btn menu__btn--close btn"
-      type="button"
-      onclick="toggleSidenav()"
-      aria-label="Toggle Side Navigation"
-    >
-      <i class="i-times"></i>
-    </button>
-
+    
     <% for (const slug in categoryParents) { %>
       <% if (categoryParents.hasOwnProperty(slug)) { %>
         <% let category, parent %>
@@ -83,11 +108,24 @@ if (mainCategories) {
                 aria-controls="<%= submenuId %>"
               <% } %>
             >
-              <i class="i-arrow-left"></i>
+              
+              <i class="icon">
+                
+<svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M11.25 5L6.75 9.5L11.25 14" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  
+              </i>
+              <%- category.name %>
             </button>
           <% } %>
 
           <div class="menu__list">
+            <% if (category && category.slug && category.name == "Discos") { %>
+              <a href="/<%= category.slug %>" class="menu__item">
+                <span>Todos os Discos</span>
+              </a>
+            <% } %>
             <% categoryParents[slug].forEach((subcategory, index) => { %>
               <% const hasSubmenu = Array.isArray(categoryParents[subcategory.slug]) %>
               <a
@@ -105,34 +143,30 @@ if (mainCategories) {
                 id="c-<%= subcategory._id %>"
                 class="menu__item"
               >
-                <% if (subcategory.icon) { %>
-                  <span class="menu__item-icon">
-                    <img
-                      data-src="<%= subcategory.icon.url %>"
-                      alt="<%= subcategory.icon.alt || subcategory.name %>"
-                      class="lozad"
-                      data-preload="<%= (index * 200) %>"
-                    >
-                  </span>
-                <% } %>
+                
                 <span>
                   <%= subcategory.name %>
                 </span>
+                <% if (hasSubmenu) { %>
+                  <div class="icon">
+                    
+<svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M6.75 14L11.25 9.5L6.75 5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  
+                  </div>
+                <% } %>
               </a>
             <% }) %>
           </div>
 
-          <% if (category && category.slug) { %>
-            <a href="/<%= category.slug %>" class="menu__link">
-              <%= _.dictionary('seeAll$1Category').replace('$1', category.name) %>
-            </a>
-          <% } %>
+          
         </div>
       <% } %>
     <% } %>
   </nav>
 
-  <footer class="menu__footer">
+  <footer class="menu__footer d-none">
     <% if (menu.phone_wpp) { %>
       <div class="menu__phone">
         <% if (contacts.whatsapp) { %>

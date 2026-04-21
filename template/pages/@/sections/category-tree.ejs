@@ -19,6 +19,23 @@ if (Array.isArray(allCategories) && allCategories.length) {
   const categoryLink = opt.link || '/search'
   const sectionTitle = opt.title || 'Categorias'
 
+  // Detect current category context
+  let startCategories = rootCategories
+  let startParentName = null
+  const onCategoryPage = _.route && _.route.resource === 'categories' && _.state && _.state.slug
+  if (onCategoryPage) {
+    const currentSlug = _.state.slug
+    const children = catByParent[currentSlug]
+    if (children && children.length) {
+      startCategories = children
+      startParentName = _.state.name || null
+    } else {
+      startCategories = []
+    }
+  }
+
+  if (startCategories.length) {
+
   const buildCardHtml = (cat, level) => {
     const isLeaf = !catByParent[cat.slug] || catByParent[cat.slug].length === 0
     const initial = (cat.name || '?').charAt(0).toUpperCase()
@@ -33,7 +50,7 @@ if (Array.isArray(allCategories) && allCategories.length) {
             class="lozad category-tree__icon"
           >`
       : `<div class="category-tree__placeholder" style="background:hsl(${hue},55%,50%)">${initial}</div>`
-    return `<div class="col-6 col-md-4 col-lg-3 mb-2">
+    return `<div class="col-4 col-md-4 col-lg-3 mb-2">
       <button
         class="category-tree__card d-flex align-items-center w-100"
         onclick="catTreeSelect('${secId}','${cat.slug}',${level},${isLeaf})"
@@ -48,7 +65,15 @@ if (Array.isArray(allCategories) && allCategories.length) {
 %>
 
 <style>
-  .category-tree { margin-top: .5rem; }
+  
+  .category-tree .row {
+    margin-left: -.25rem;
+    margin-right: -.25rem;
+  }
+  .category-tree .row > [class*="col-"] {
+    padding-left: .25rem;
+    padding-right: .25rem;
+  }
   .category-tree__level { animation: ctFadeIn .2s ease; }
   .category-tree__level-header {
     font-size: .8rem;
@@ -67,7 +92,7 @@ if (Array.isArray(allCategories) && allCategories.length) {
     background: #f5f5f5;
     border: 1px solid transparent;
     border-radius: 8px;
-    padding: .5rem .75rem;
+    padding: .5rem .5rem;
     cursor: pointer;
     transition: background .15s, border-color .15s;
     text-align: left;
@@ -90,6 +115,7 @@ if (Array.isArray(allCategories) && allCategories.length) {
     max-width: 68px;
     max-height: 68px;
     object-fit: contain;
+    border-radius: 4px;
   }
   .category-tree__placeholder {
     width: 68px;
@@ -108,25 +134,74 @@ if (Array.isArray(allCategories) && allCategories.length) {
     line-height: 1.3;
     color: #222;
   }
+
+  /* ── Responsive ── */
+  @media (max-width: 575.98px) {
+    .category-tree__card {
+      padding: .4rem;
+      gap: .5rem;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .category-tree__img-wrap {
+      width: 48px;
+      height: 48px;
+    }
+    .category-tree__icon {
+      max-width: 48px;
+      max-height: 48px;
+    }
+    .category-tree__placeholder {
+      width: 48px;
+      height: 48px;
+      font-size: 1.2rem;
+    }
+    .category-tree__name {
+      font-size: .75rem;
+    }
+  }
+
+  @media (min-width: 576px) and (max-width: 767.98px) {
+    .category-tree__card {
+      padding: .45rem .5rem;
+      gap: .6rem;
+    }
+    .category-tree__img-wrap {
+      width: 56px;
+      height: 56px;
+    }
+    .category-tree__icon {
+      max-width: 56px;
+      max-height: 56px;
+    }
+    .category-tree__placeholder {
+      width: 56px;
+      height: 56px;
+      font-size: 1.4rem;
+    }
+  }
 </style>
 
-<div class="collection-shelf my-lg-5">
-  <h4 class="products-carousel__title">
-    <% if (sectionTitle) { %>
-      <span><%= sectionTitle %></span>
+<div class="collection-shelf category-tree <% if (!startParentName) { %>my-lg-5 my-3<% } %>">
+  <% if (!startParentName) { %>
+    <h4 class="products-carousel__title mb-4">
+      <% if (sectionTitle) { %>
+        <span><%= sectionTitle %></span>
+      <% } %>
+      
+    </h4>
+    <% if (opt.subtitle) { %>
+      <p class="text-muted mb-3"><%= opt.subtitle %></p>
     <% } %>
-    <a href="<%= categoryLink %>" class="products-carousel__see-all">
-      <%= _.dictionary('seeAll') || 'Ver todas as categorias' %>
-    </a>
-  </h4>
-  <% if (opt.subtitle) { %>
-    <p class="text-muted mb-3"><%= opt.subtitle %></p>
   <% } %>
-
   <div id="<%= secId %>" class="category-tree">
     <div class="category-tree__level" data-level="0">
+      <% if (startParentName) { %>
+        <div class="category-tree__level-header"><%= startParentName %></div>
+      <% } %>
       <div class="row">
-        <%- rootCategories.map(cat => buildCardHtml(cat, 0)).join('') %>
+        <%- startCategories.map(cat => buildCardHtml(cat, 0)).join('') %>
       </div>
     </div>
   </div>
@@ -200,7 +275,7 @@ if (Array.isArray(allCategories) && allCategories.length) {
       var iconHtml = cat.icon
         ? '<img data-src="' + cat.icon.url + '" alt="' + (cat.icon.alt || cat.name) + '" class="lozad category-tree__icon">'
         : '<div class="category-tree__placeholder" style="background:hsl(' + hue + ',55%,50%)">' + initial + '</div>'
-      return '<div class="col-6 col-md-4 col-lg-3 mb-2">' +
+      return '<div class="col-4 col-md-4 col-lg-3 mb-2">' +
         '<button class="category-tree__card d-flex align-items-center w-100" ' +
           'onclick="catTreeSelect(\'' + secId + '\',\'' + cat.slug + '\',' + level + ',' + isLeaf + ')" ' +
           'type="button" aria-label="' + cat.name + '">' +
@@ -224,8 +299,12 @@ if (Array.isArray(allCategories) && allCategories.length) {
       lozad(levelDiv.querySelectorAll('.lozad')).observe()
     }
 
-    // smooth scroll to new level
-    levelDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    // smooth scroll to the subcategory title, offset by fixed header height
+    var scrollTarget = levelDiv.querySelector('.category-tree__level-header') || levelDiv
+    var header = document.getElementById('header')
+    var headerOffset = header ? header.offsetHeight : 0
+    var targetTop = scrollTarget.getBoundingClientRect().top + window.pageYOffset - headerOffset
+    window.scrollTo({ top: targetTop, behavior: 'smooth' })
   }
 </script>
-<% } %>
+<% } } %>

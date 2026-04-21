@@ -61,19 +61,7 @@ const isTableLayout = currentCategorySlug && (
           -->
         </div>
 
-        <div id="search-engine-snap">
-          <article class="search-engine__retail">
-            <div class="row">
-              <% for (let i = 0; i < items.length; i++) { %>
-                <div class="<%= isTableLayout ? 'col-12' : 'col-6 col-md-4 col-lg-3' %>">
-                  <%- await include('@/sections/inc/product-item', {
-                    _, opt: { item: items[i] }
-                  }) %>
-                </div>
-              <% } %>
-            </div>
-          </article>
-        </div>
+        
       <% } %>
     </div>
 

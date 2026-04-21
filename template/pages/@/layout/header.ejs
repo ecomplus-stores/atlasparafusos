@@ -131,7 +131,7 @@ const hasAllDepartments = header.menu_all_departments
           onclick="toggleSidenav()"
           aria-label="Toggle side navigation"
         >
-          <i class="header__toggler-icon i-bars"></i>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#000000" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"></path></svg>
           <% if (!categories.length) { %>
             <span class="d-none d-lg-inline">
               Menu
@@ -152,21 +152,7 @@ const hasAllDepartments = header.menu_all_departments
           role="group"
           aria-label="<%= _.dictionary('myAccount') %>"
         >
-          <button
-            class="d-lg-none btn btn-lg"
-            id="mobile-search-btn"
-            type="button"
-            data-toggle="collapse"
-            data-target="#search-bar"
-            aria-expanded="true"
-            aria-controls="search-bar"
-            aria-controls="search-bar"
-            title="<%= _.dictionary('searchProducts') %>"
-          >
-            <span class="ico">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><circle cx="112" cy="112" r="80" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"/><line x1="168.57" y1="168.57" x2="224" y2="224" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"/></svg>
-            </span>
-          </button>
+          
 
           <a
             id="user-button"
@@ -211,7 +197,7 @@ const hasAllDepartments = header.menu_all_departments
         const searchColSize = !isCategoriesNavFull && categories.length ? '-3' : ''
         %>
         <div
-          class="d-none d-lg-block col-12 col-lg<%= searchColSize %> collapse show"
+          class="d-block px-0 px-md-3 d-lg-block col-12 col-lg<%= searchColSize %> collapse show"
           id="search-bar"
         >
           <form
@@ -225,6 +211,7 @@ const hasAllDepartments = header.menu_all_departments
               name="term"
               placeholder="<%= _.dictionary('searchProducts') %>"
               aria-label="<%= _.dictionary('searchProducts') %>"
+              autocomplete="off"
               class="header__search-input form-control"
               id="search-input"
             >

@@ -12,6 +12,12 @@
       "enabled": true
     },
     {
+      "type": "category-tree",
+      "enabled": true,
+      "title": "Categorias",
+      "subtitle": ""
+    },
+    {
       "type": "category-retail",
       "enabled": true,
       "sort": "sales"

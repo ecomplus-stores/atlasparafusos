@@ -1,6 +1,6 @@
 <section class="search-engine">
   <a-backdrop :is-visible.sync="isAsideVisible"/>
-
+  
   <transition
     enter-active-class="animated slideInRight"
     leave-active-class="animated slideOutRight"
@@ -95,6 +95,7 @@
             </div>
           </div>
 
+          <template v-if="hasSelectedOptions || filters.some(f => f.options.length)">
           <div
             v-for="({ filter, options, isSpec }, i) in filters"
             v-if="options.length"
@@ -149,6 +150,7 @@
             </template>
           </div>
           <hr>
+          </template>
         </div>
 
         <footer class="card-footer" v-if="1 != 1">
@@ -194,8 +196,8 @@
       </span>
     </button>
   </transition>
-
-  <div class="search-engine__body">
+  
+  <div class="search-engine__body" >
     <div
       class="search-engine__sidebar card"
       v-if="isFilterable && hasSearched"
@@ -242,10 +244,17 @@
         </div>
       </template>
 
-      <h3 v-else-if="hasEmptyResult && popularItems.length">
-        {{ i19popularProducts }}
-      </h3>
+      <div
+        v-else-if="hasEmptyResult && !hasSelectedOptions && !isSearching"
+        class="search-engine__no-results"
+      >
+        <p class="lead">Nenhum produto encontrado.</p>
+        <h3 v-if="popularItems.length" class="mt-3">
+          {{ i19popularProducts }}
+        </h3>
+      </div>
 
+     
       <transition
         enter-active-class="animated fadeInDown"
         leave-active-class="animated fadeOutUp"
@@ -318,6 +327,8 @@
             </label>
           </div>
         </div>
+
+        <template v-if="hasSelectedOptions || filters.some(f => f.options.length)">
         <hr>
 
         <div
@@ -373,8 +384,8 @@
           </template>
         </div>
         <hr class="mt-3">
+          </template>
       </div>
-
       <footer class="card-footer" v-if="1 != 1">
         <button
           class="btn btn-sm btn-block btn-outline-secondary"
@@ -395,7 +406,7 @@
         leave-active-class="animated fadeOutUp fast position-absolute"
       >
         <div
-          v-if="isNavVisible"
+          
           class="search-engine__nav"
         >
           <div class="container">
@@ -430,7 +441,7 @@
                     {{ i19filterResults }}
                   </span>
                   <span class="d-md-none">
-                    {{ i19filter }}
+                    {{ i19filterResults }}
                   </span>
                 </button>
 
@@ -443,8 +454,8 @@
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
-                    <i class="i-sort mr-1"></i>
-                    {{ i19sort }}
+                    <b>Ordenar por</b> {{ (sortOptions.find(o => o.value === selectedSortOption) || { label: 'Relevância' }).label }}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#000000" viewBox="0 0 256 256"><path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path></svg>
                   </button>
 
                   <div
@@ -519,9 +530,15 @@
                 </div>
               </template>
 
-              <h3 v-else-if="hasEmptyResult && popularItems.length">
-                {{ i19popularProducts }}
-              </h3>
+              <div
+                v-else-if="hasEmptyResult && !hasSelectedOptions && !isSearching"
+                class="search-engine__no-results"
+              >
+                <p class="lead">Nenhum produto encontrado.</p>
+                <h3 v-if="popularItems.length" class="mt-3">
+                  {{ i19popularProducts }}
+                </h3>
+              </div>
 
               <transition
                 enter-active-class="animated fadeInDown"
