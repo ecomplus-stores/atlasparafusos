@@ -1337,7 +1337,8 @@ body .cart-item {
     }
   }
 }
-
+.search-engine__aside-open,
+.search-engine__results .search-engine__info {display: none;}
 @media(min-width:992px){
   #search-engine .search-engine{
     &__sidebar{
