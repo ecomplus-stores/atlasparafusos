@@ -1339,7 +1339,7 @@ body .cart-item {
 }
 
 @media(min-width:992px){
-  .search-engine{
+  #search-engine .search-engine{
     &__sidebar{
       display: block;
       position: sticky;
@@ -1362,10 +1362,10 @@ body .cart-item {
       .card-header{display: none;}
     }
   }
-  .search-engine__main{
-    .search-engine__info{display: none;}
+  // .search-engine__main{
+  //   .search-engine__info{display: none;}
      
-  }
+  // }
 }
 
 .search-engine__info{
@@ -3205,9 +3205,19 @@ ul.app_contacts{
         
     }
   }
+
+  .search-engine__filter{
+    margin-bottom: 1rem;
+    h5{font-size: 16px;}
+    label{
+      font-size: 14px;
+    }
+  }
 }
 
-
+#page-categories .collection-shelf{
+  padding: 1rem 1rem .5rem 1rem;
+}
 aside#menu{
   width: 400px;
   max-width: 100%;

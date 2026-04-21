@@ -245,7 +245,7 @@
       </template>
 
       <div
-        v-else-if="hasEmptyResult && !hasSelectedOptions && !isSearching"
+        v-else-if="hasEmptyResult && !isSearching"
         class="search-engine__no-results"
       >
         <p class="lead">Nenhum produto encontrado.</p>
@@ -408,6 +408,7 @@
         <div
           
           class="search-engine__nav"
+          v-if="!hasEmptyResult && !isSearching"
         >
           <div class="container">
             <slot
@@ -531,7 +532,7 @@
               </template>
 
               <div
-                v-else-if="hasEmptyResult && !hasSelectedOptions && !isSearching"
+                v-else-if="hasEmptyResult && !isSearching"
                 class="search-engine__no-results"
               >
                 <p class="lead">Nenhum produto encontrado.</p>
