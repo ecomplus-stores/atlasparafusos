@@ -3,6 +3,25 @@
   "meta_description": "",
   "sections": [
     {
+      "type": "banner-slider",
+      "autoplay": 2000,
+      "full_width": true,
+      "slides": [
+        {
+          "start": "",
+          "end": "",
+          "img": "/img/uploads/Outlet de Parafusos.png",
+          "mobile_img": "/img/uploads/outletdeparafusosmobile.jpg"
+        },
+        {
+          "start": "",
+          "end": "",
+          "img": "/img/uploads/Outlet de Parafusos.png",
+          "mobile_img": "/img/uploads/outletdeparafusosmobile.jpg"
+        }
+      ]
+    },
+    {
       "type": "category-tree",
       "enabled": true,
       "title": "Compre por categoria",

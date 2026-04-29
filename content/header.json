@@ -7,8 +7,10 @@
   "menu_all_departments": true,
   "centralized_logo": false,
   "marketing_stripe": {
-    "text": "",
-    "link": "/promotion"
+    "text": "Precisa para agora? <b>Compre no site e Retire na Loja</b> em Goiânia sem custo de frete!",
+    "link": "",
+    "color": "#000000",
+    "background": "#ffffff"
   },
   "alphabetical_order_submenu": true,
   "name_all_departments": "Departamentos",

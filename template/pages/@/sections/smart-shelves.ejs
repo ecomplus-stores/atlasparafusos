@@ -1,0 +1,95 @@
+<%
+const blocks = Array.isArray(opt.blocks) ? opt.blocks.slice(0, 6) : [
+  {
+    type: 'recently-viewed',
+    title: 'Visto recentemente'
+  },
+  {
+    type: 'cart',
+    title: 'Compre seu carrinho',
+    button_label: 'Ir para o carrinho',
+    button_link: '/app/#/cart'
+  },
+  {
+    type: 'last-search',
+    title: 'Sua busca'
+  },
+  {
+    type: 'wishlist',
+    title: 'Compre seu favorito'
+  },
+  {
+    type: 'last-order',
+    title: 'Repita o mercado',
+    button_label: 'Ver produtos',
+    button_link: '/app/#/orders'
+  },
+  {
+    type: 'payment-methods',
+    title: 'Meios de pagamento',
+    text: 'Pague suas compras com rapidez e segurança.',
+    button_label: 'Mostrar meios',
+    button_link: '/cupons-meios-de-pagamento-e-de-frete'
+  }
+]
+%>
+
+<section class="smart-shelves my-3 my-lg-4">
+  <div class="container">
+    <div class="smart-shelves__wrapper">
+      <div class="smart-shelves__track" data-smart-shelves>
+
+        <% for (let i = 0; i < blocks.length; i++) {
+          const block = blocks[i]
+          const isStatic = block.type === 'payment-methods'
+          const isGrid = block.type === 'last-order'
+        %>
+        <div
+          class="smart-shelves__block"
+          data-block-type="<%= block.type %>"
+          data-block-config='<%= JSON.stringify(block) %>'
+          <%= isStatic ? '' : 'style="display:none"' %>
+        >
+          <div class="smart-shelves__card">
+            <h5 class="smart-shelves__card-title"><%= block.title %></h5>
+
+            <% if (isStatic) { %>
+              <div class="smart-shelves__media smart-shelves__media--static">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-hidden="true" focusable="false">
+                  <rect x="8" y="26" width="84" height="56" rx="9" fill="#F3F4F6" stroke="#E5E7EB" stroke-width="2"/>
+                  <rect x="8" y="38" width="84" height="14" fill="#E5E7EB"/>
+                  <rect x="16" y="60" width="26" height="9" rx="4" fill="#D1D5DB"/>
+                  <circle cx="66" cy="64" r="13" fill="#FCD34D"/>
+                  <circle cx="77" cy="64" r="13" fill="#FBBF24" fill-opacity="0.82"/>
+                </svg>
+                <p class="smart-shelves__static-text"><%= block.text || 'Pague com rapidez e segurança.' %></p>
+              </div>
+
+            <% } else if (isGrid) { %>
+              <div class="smart-shelves__media smart-shelves__media--grid" data-block-products></div>
+
+            <% } else { %>
+              <div class="smart-shelves__media" data-block-products></div>
+            <% } %>
+
+            <% if (block.button_label) { %>
+              <a href="<%= block.button_link || '#' %>" class="btn smart-shelves__btn">
+                <%= block.button_label %>
+              </a>
+            <% } %>
+          </div>
+        </div>
+        <% } %>
+
+      </div>
+
+      <button
+        class="smart-shelves__arrow"
+        aria-label="Próximo"
+        data-smart-shelves-next
+      >
+        <i class="i-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</section>
