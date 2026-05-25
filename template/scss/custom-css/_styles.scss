@@ -308,8 +308,21 @@ main #search-input{
     border-color: rgba(0, 0, 0, 0);
     border-width: 1.5px;
 }
+.prices__compare{
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  .prices__compare-discount{
+        background-color: rgba(0, 166, 80, .102);
+    border-radius: 4px;
+    color: #00a650;
+    font-size: 14px;
+    line-height: normal;
+    padding: 0 5px 2px;
+    font-weight:    500;
 
-
+  }
+}
 .product-card{
   background: #fff;
   padding: 16px;
@@ -4319,3 +4332,5 @@ main .header{box-shadow: 0px 0px 0px!important;}
     overflow-y: scroll;
   }
 }
+
+.prices__value > small{display:none}

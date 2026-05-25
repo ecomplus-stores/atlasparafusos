@@ -101,7 +101,7 @@
 
       <slot
         name="without-price"
-        v-else-if="isWithoutPrice"
+        v-else-if="isWithoutPrice && !body.variations"
       >
         <p class="badge badge-info mt-auto">
           {{ i19uponRequest }}
@@ -110,9 +110,10 @@
 
       <template v-else>
         <slot name="prices">
+         
           <a-prices
             class="product-card__prices"
-            :product="body"
+            :product="cardProductForPrices"
             :installments-option="installmentsOption"
             :discount-option="discountOption"
           />

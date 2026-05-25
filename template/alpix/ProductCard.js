@@ -120,6 +120,29 @@ export default {
       return !getPrice(this.body)
     },
 
+    minVariationPrice () {
+      if (!this.body.variations || !this.body.variations.length) return 0
+      return this.body.variations.reduce((min, variation) => {
+        const price = variation.price
+        if (price > 0 && (min === 0 || price < min)) {
+          return price
+        }
+        return min
+      }, 0)
+    },
+
+    isFromPrice () {
+      return this.isWithoutPrice && !!this.body.variations && !!this.body.variations.length &&
+        !this.selectedVariationId && this.minVariationPrice > 0
+    },
+
+    cardProductForPrices () {
+      if (this.isFromPrice) {
+        return { ...this.body, price: this.minVariationPrice }
+      }
+      return this.body
+    },
+
     ratingHtml () {
       return getExternalHtml('Rating', this.body)
     },

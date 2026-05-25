@@ -9,6 +9,9 @@
     <template v-if="isLiteral">
      
       <s>{{ formatMoney(comparePrice) }}</s>
+      <span class="prices__compare-discount">
+        {{ Math.round((comparePrice - finalPrice) / comparePrice * 100) }}% OFF
+      </span>
      
     </template>
     <s v-else>{{ formatMoney(comparePrice) }}</s>
@@ -25,7 +28,7 @@
     </template>
     <s v-else>{{ formatMoney(price) }}</s>
   </span>
-
+  
   <div
     key="discount"
     v-if="typeof priceWithDiscount === 'number' && priceWithDiscount < finalPrice"
@@ -58,10 +61,10 @@
         <b>{{ progressiveDiscount }}% + {{ paymentDiscountPercentage }}% OFF</b>
       </template>
       <template v-else-if="progressiveDiscount > 0">
-        <b>{{ progressiveDiscount }}% OFF</b>
+        <b>+{{ progressiveDiscount }}% OFF</b>
       </template>
       <template v-else>
-        <b>{{ paymentDiscountPercentage }}% OFF</b>
+        <b>+{{ paymentDiscountPercentage }}% OFF</b>
       </template>
     </span>
   </div>

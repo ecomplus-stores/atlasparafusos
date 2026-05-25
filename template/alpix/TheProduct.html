@@ -119,6 +119,18 @@
                   :quantity="qntToBuy"
                   @fix-price="price => fixedPrice = price"
                 />
+                <slot
+                  name="discount-tag"
+                  v-bind="{ discount }"
+                >
+                  <span
+                    v-if="discount > 0 && 1 != 1"
+                    class="product__discount"
+                  >
+                    {{ i19discountOf }}
+                    <strong>{{ discount }}%</strong>
+                  </span>
+                </slot>
                 <div 
                   v-if="(selectedVariationId && selectedVariation.flags && selectedVariation.flags.length > 0) || (body.flags && body.flags.length > 0 && !selectedVariationId)" 
                   class="progressive-discount-table"
@@ -141,18 +153,7 @@
                     </div>
                   </div>
                 </div>
-                <slot
-                  name="discount-tag"
-                  v-bind="{ discount }"
-                >
-                  <span
-                    v-if="discount > 0"
-                    class="product__discount"
-                  >
-                    {{ i19discountOf }}
-                    <strong>{{ discount }}%</strong>
-                  </span>
-                </slot>
+                
               </p>
             </slot>
 
