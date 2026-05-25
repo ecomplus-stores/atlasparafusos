@@ -3396,23 +3396,42 @@ main .header{box-shadow: 0px 0px 0px!important;}
   b{color: #d41217;}
 }
 
+.top-bar__marquee-track {
+  display: none;
+}
+
+.top-bar__countdown--desktop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @media (max-width: 767px) {
   .top-bar {
     overflow: hidden;
 
-    .top-bar__countdown {
-      display: flex !important;
+    .top-bar__marquee-track {
+      display: flex;
+      width: max-content;
+      animation: top-bar-marquee 10s linear infinite;
+    }
+
+    .top-bar__marquee-item {
+      flex-shrink: 0;
       white-space: nowrap;
-      text-align: left !important;
-      justify-content: flex-start !important;
-      animation: top-bar-marquee 18s linear infinite;
-      width:fit-content
+      padding-right: 3rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .top-bar__countdown--desktop {
+      display: none;
     }
   }
 
   @keyframes top-bar-marquee {
-    0%   { transform: translateX(100vw); }
-    100% { transform: translateX(-100%); }
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-33.333%); }
   }
 }
 .align-items-center{
