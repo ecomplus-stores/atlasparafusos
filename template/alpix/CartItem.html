@@ -59,6 +59,21 @@
           :item="item"
           class="cart-item__customizations"
         />
+
+        <div
+          v-if="item.specifications && Object.keys(item.specifications).length"
+          class="cart-item__variations small"
+        >
+          <span
+            v-for="(specs, gridId) in item.specifications"
+            :key="gridId"
+            class="cart-item__variation"
+          >
+            <span class="text-muted">{{ getGridTitle(gridId) }}:</span>
+            {{ specs[0] && specs[0].text }}
+            
+          </span>
+        </div>
         </div>
         <div>
           <div class="cart-item__actions">

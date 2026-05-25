@@ -10,8 +10,9 @@ try {
 }
 
 if (Array.isArray(allCategories) && allCategories.length) {
+  allCategories = allCategories.filter(cat => cat.name != "Ocultar")
   const catByParent = _.lodash.groupBy(allCategories, ({ parent }) => {
-    return !parent || !parent.slug ? '_' : parent.slug
+    return !parent || !parent.name ? '_' : parent.name
   })
   const rootCategories = catByParent['_'] || []
   const secId = 'ct' + Math.random().toString(36).slice(2, 7)
@@ -25,7 +26,7 @@ if (Array.isArray(allCategories) && allCategories.length) {
   const onCategoryPage = _.route && _.route.resource === 'categories' && _.state && _.state.slug
   if (onCategoryPage) {
     const currentSlug = _.state.slug
-    const children = catByParent[currentSlug]
+    const children = catByParent[_.state.name]
     if (children && children.length) {
       startCategories = children
       startParentName = _.state.name || null
@@ -37,7 +38,7 @@ if (Array.isArray(allCategories) && allCategories.length) {
   if (startCategories.length) {
 
   const buildCardHtml = (cat, level) => {
-    const isLeaf = !catByParent[cat.slug] || catByParent[cat.slug].length === 0
+    const isLeaf = !catByParent[cat.name] || catByParent[cat.name].length === 0
     const initial = (cat.name || '?').charAt(0).toUpperCase()
     // deterministic hue from category _id or name
     const hue = (cat._id
@@ -53,7 +54,7 @@ if (Array.isArray(allCategories) && allCategories.length) {
     return `<div class="col-4 col-md-4 col-lg-3 mb-2">
       <button
         class="category-tree__card d-flex align-items-center w-100"
-        onclick="catTreeSelect('${secId}','${cat.slug}',${level},${isLeaf})"
+        onclick="catTreeSelect('${secId}','${cat.slug}','${cat.name}',${level},${isLeaf})"
         type="button"
         aria-label="${cat.name}"
       >
@@ -211,7 +212,7 @@ if (Array.isArray(allCategories) && allCategories.length) {
   window._catTree = window._catTree || {}
   window._catTree['<%= secId %>'] = <%- JSON.stringify(catByParent) %>
 
-  function catTreeSelect (secId, slug, level, isLeaf) {
+  function catTreeSelect (secId, slug, name, level, isLeaf) {
     if (isLeaf) {
       window.location.href = '/' + slug
       return
@@ -237,26 +238,18 @@ if (Array.isArray(allCategories) && allCategories.length) {
       if (clicked) clicked.classList.add('active')
     }
 
-    var children = window._catTree[secId][slug]
+    var children = window._catTree[secId][name]
     if (children && children.length) {
-      catTreeRender(secId, slug, children, level + 1)
+      catTreeRender(secId, slug, name, children, level + 1)
     } else {
       window.location.href = '/' + slug
     }
   }
 
-  function catTreeRender (secId, parentSlug, cats, level) {
+  function catTreeRender (secId, parentSlug, parentName, cats, level) {
     var container = document.getElementById(secId)
     if (!container) return
     var map = window._catTree[secId]
-
-    var parentCat = null
-    Object.keys(map).forEach(function (key) {
-      map[key].forEach(function (c) {
-        if (c.slug === parentSlug) parentCat = c
-      })
-    })
-    var parentName = parentCat ? parentCat.name : ''
 
     var hslFromCat = function (cat) {
       var hue = 0
@@ -269,7 +262,7 @@ if (Array.isArray(allCategories) && allCategories.length) {
     }
 
     var cards = cats.map(function (cat) {
-      var isLeaf = !map[cat.slug] || map[cat.slug].length === 0
+      var isLeaf = !map[cat.name] || map[cat.name].length === 0
       var initial = (cat.name || '?').charAt(0).toUpperCase()
       var hue = hslFromCat(cat)
       var iconHtml = cat.icon
@@ -277,7 +270,7 @@ if (Array.isArray(allCategories) && allCategories.length) {
         : '<div class="category-tree__placeholder" style="background:hsl(' + hue + ',55%,50%)">' + initial + '</div>'
       return '<div class="col-4 col-md-4 col-lg-3 mb-2">' +
         '<button class="category-tree__card d-flex align-items-center w-100" ' +
-          'onclick="catTreeSelect(\'' + secId + '\',\'' + cat.slug + '\',' + level + ',' + isLeaf + ')" ' +
+          'onclick="catTreeSelect(\'' + secId + '\',\'' + cat.slug + '\',\'' + cat.name + '\',' + level + ',' + isLeaf + ')" ' +
           'type="button" aria-label="' + cat.name + '">' +
           '<span class="category-tree__img-wrap flex-shrink-0">' + iconHtml + '</span>' +
           '<span class="category-tree__name">' + cat.name + '</span>' +

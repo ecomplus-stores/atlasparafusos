@@ -1,0 +1,87 @@
+<% const ptProductId = _.state._id %>
+<% if (ptProductId) { %>
+<section
+  id="product-testimonials"
+  class="product-testimonials"
+  data-product-id="<%= ptProductId %>"
+>
+  <div class="container">
+  <div class="product-testimonials__card">
+
+    <!-- ── Header ─────────────────────────────────────────────── -->
+    <div class="product-testimonials__header">
+      <p class="product-testimonials__eyebrow">Veja opiniões de quem já comprou</p>
+      <h2 class="product-testimonials__title">Olhe o que estão falando sobre este produto</h2>
+      <div id="pt-count-badge" class="product-testimonials__count-wrap" style="display:none">
+        <span class="product-testimonials__count-badge" id="pt-count-text"></span>
+      </div>
+    </div>
+
+    <!-- ── Loading ────────────────────────────────────────────── -->
+    <div class="product-testimonials__loading" id="pt-loading">
+      <span class="pt-spinner"></span>
+      <span class="text-muted small">Carregando avaliações…</span>
+    </div>
+
+    <!-- ── Empty ──────────────────────────────────────────────── -->
+    <div class="product-testimonials__empty" id="pt-empty" style="display:none">
+      <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+      <p class="mt-2 mb-0">Nenhuma avaliação encontrada para este produto.</p>
+    </div>
+
+    <!-- ── Main body ──────────────────────────────────────────── -->
+    <div class="product-testimonials__body" id="pt-body" style="display:none">
+
+      <!-- Left: Summary panel -->
+      <aside class="product-testimonials__summary">
+        <div class="pt-summary-score">
+          <span class="pt-summary-score__number" id="pt-avg-number">—</span>
+          <span class="pt-summary-score__denom">/5</span>
+        </div>
+        <div class="pt-summary-score__stars" id="pt-avg-stars"></div>
+        <div class="pt-summary-score__count" id="pt-avg-count"></div>
+
+        <div class="pt-bars" id="pt-bars"></div>
+
+        <div class="pt-rec" id="pt-recommended"></div>
+      </aside>
+
+      <!-- Right: Reviews -->
+      <div class="product-testimonials__reviews">
+
+        <div class="product-testimonials__toolbar">
+          <span class="product-testimonials__sort-label">Ordenar por:</span>
+          <div class="pt-sort-wrap">
+            <select id="pt-sort" class="pt-sort">
+              <option value="recent">Mais recentes</option>
+              <option value="best">Melhor avaliação</option>
+              <option value="worst">Pior avaliação</option>
+            </select>
+            <svg class="pt-sort-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 6 8 10 12 6"/></svg>
+          </div>
+        </div>
+
+        <div class="product-testimonials__list" id="pt-list"></div>
+
+        <div class="product-testimonials__loadmore-wrap" id="pt-loadmore-wrap" style="display:none">
+          <button id="pt-loadmore" class="pt-loadmore-btn" type="button">
+            Carregar mais avaliações
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── Gallery ─────────────────────────────────────────────── -->
+    <div class="product-testimonials__gallery" id="pt-gallery-wrap" style="display:none">
+      <h6 class="pt-gallery-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Fotos e vídeos dos clientes
+      </h6>
+      <div class="pt-gallery-grid" id="pt-gallery"></div>
+    </div>
+
+  </div><!-- /.product-testimonials__card -->
+  </div><!-- /.container -->
+</section>
+<% } %>

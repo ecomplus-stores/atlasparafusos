@@ -386,7 +386,7 @@ export default {
     },
 
     formatMoney (price) {
-      return formatMoney(price)
+      return formatMoney(price || 0)
     }
   },
 
@@ -405,7 +405,6 @@ export default {
     if (!this.isLoaded && this.productId) {
       this.fetchItem()
     } else if (this.product && !this.product.flags) {
-      this.productId = this.product._id
       this.fetchItem()
     }
   }

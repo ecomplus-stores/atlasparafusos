@@ -57,16 +57,35 @@ const hasAllDepartments = header.menu_all_departments
 <div class="top-bar">
   <% if (header.marketing_stripe) { %>
     <% if (header.marketing_stripe.text) { %>
+      <%# Mobile: marquee track com 3 cópias %>
+      <div class="top-bar__marquee-track d-md-none">
+        <% for (let _mi = 0; _mi < 3; _mi++) { %>
+          <% if (header.marketing_stripe.link) { %>
+            <a
+              class="top-bar__countdown top-bar__marquee-item"
+              style="<%= marketingStripeStyle %>"
+              href="<%= header.marketing_stripe.link %>"
+            >
+              <%= header.marketing_stripe.text %>
+            </a>
+          <% } else { %>
+            <div class="top-bar__countdown top-bar__marquee-item d-flex align-items-center text-center" style="<%= marketingStripeStyle %>">
+              <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#d41217" viewBox="0 0 256 256"><path d="M232,96a7.89,7.89,0,0,0-.3-2.2L217.35,43.6A16.07,16.07,0,0,0,202,32H54A16.07,16.07,0,0,0,38.65,43.6L24.31,93.8A7.89,7.89,0,0,0,24,96h0v16a40,40,0,0,0,16,32v72a8,8,0,0,0,8,8H208a8,8,0,0,0,8-8V144a40,40,0,0,0,16-32V96ZM54,48H202l11.42,40H42.61Zm50,56h48v8a24,24,0,0,1-48,0Zm-16,0v8a24,24,0,0,1-35.12,21.26,7.88,7.88,0,0,0-1.82-1.06A24,24,0,0,1,40,112v-8ZM200,208H56V151.2a40.57,40.57,0,0,0,8,.8,40,40,0,0,0,32-16,40,40,0,0,0,64,0,40,40,0,0,0,32,16,40.57,40.57,0,0,0,8-.8Zm4.93-75.8a8.08,8.08,0,0,0-1.8,1.05A24,24,0,0,1,168,112v-8h48v8A24,24,0,0,1,204.93,132.2Z"></path></svg><div><%- header.marketing_stripe.text %></div>
+            </div>
+          <% } %>
+        <% } %>
+      </div>
+      <%# Desktop: item único centralizado %>
       <% if (header.marketing_stripe.link) { %>
         <a
-          class="top-bar__countdown"
+          class="top-bar__countdown d-none d-md-flex align-items-center justify-content-center"
           style="<%= marketingStripeStyle %>"
           href="<%= header.marketing_stripe.link %>"
         >
           <%= header.marketing_stripe.text %>
         </a>
       <% } else { %>
-        <div class="top-bar__countdown d-flex align-items-center justify-content-center text-center" style="<%= marketingStripeStyle %>">
+        <div class="top-bar__countdown d-none d-md-flex align-items-center justify-content-center text-center" style="<%= marketingStripeStyle %>">
           <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#d41217" viewBox="0 0 256 256"><path d="M232,96a7.89,7.89,0,0,0-.3-2.2L217.35,43.6A16.07,16.07,0,0,0,202,32H54A16.07,16.07,0,0,0,38.65,43.6L24.31,93.8A7.89,7.89,0,0,0,24,96h0v16a40,40,0,0,0,16,32v72a8,8,0,0,0,8,8H208a8,8,0,0,0,8-8V144a40,40,0,0,0,16-32V96ZM54,48H202l11.42,40H42.61Zm50,56h48v8a24,24,0,0,1-48,0Zm-16,0v8a24,24,0,0,1-35.12,21.26,7.88,7.88,0,0,0-1.82-1.06A24,24,0,0,1,40,112v-8ZM200,208H56V151.2a40.57,40.57,0,0,0,8,.8,40,40,0,0,0,32-16,40,40,0,0,0,64,0,40,40,0,0,0,32,16,40.57,40.57,0,0,0,8-.8Zm4.93-75.8a8.08,8.08,0,0,0-1.8,1.05A24,24,0,0,1,168,112v-8h48v8A24,24,0,0,1,204.93,132.2Z"></path></svg><div><%- header.marketing_stripe.text %></div>
         </div>
       <% } %>
@@ -275,9 +294,9 @@ const hasAllDepartments = header.menu_all_departments
                   <%= header.name_all_departments || _.dictionary('all') %>
                 </a>
                 <nav class="header__submenu" id="s-all">
-                  <% _.categories.forEach(({ name, slug, parent, _id }) => { %>
+                  <% _.categories.filter(cat => !cat.parent && cat.name != "Ocultar").forEach(({ name, slug, parent, _id }) => { %>
                     <% if (!parent || !parent.slug) { %>
-                      <% const subcategories = _.categories.filter(({ parent: p }) => p && p.slug === slug) %>
+                      <% const subcategories = _.categories.filter(({ parent: p }) => p && p.name === name.toUpperCase()) %>
                       <div class="header__submenu-item<%= subcategories.length ? ' header__submenu-item--has-children' : '' %>">
                         <a id="sd-all-<%= _id %>" href="/<%= slug %>"><%= name %>
                           <%- subcategories.length ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#000000" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path></svg>' : '' %>
@@ -308,9 +327,11 @@ const hasAllDepartments = header.menu_all_departments
                 >
                   <%= name %>
                 </a>
-                <%- $categoryLink %>
+                
+                <%- $categoryLink %> 
                 <%  if (slug && hasMegamenu) { %>
-                  <% const subcategories = _.categories.filter(({ parent }) => parent && parent.slug === slug) %>
+                  <% const subcategories = _.categories.filter(({ parent }) => parent && parent.name === name.toUpperCase()) %>
+                  
                   <% if (subcategories.length) { %>
                     <%
                       if (isAlphabeticalOrderSubmenu) {
@@ -321,7 +342,7 @@ const hasAllDepartments = header.menu_all_departments
                     %>
                     <nav class="header__submenu" id="<%= `s-${slug.replace(/\//g, '_')}` %>">
                       <% subcategories.forEach(subcategory => { %>
-                        <% const thirdCategories = _.categories.filter(({ parent }) => parent && parent.slug === subcategory.slug) %>
+                        <% const thirdCategories = _.categories.filter(({ parent }) => parent && parent.name === subcategory.name.toUpperCase()) %>
                         <%
                           if (isAlphabeticalOrderSubmenu) {
                             thirdCategories.sort((a, b)=> {

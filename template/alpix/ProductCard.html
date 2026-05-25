@@ -221,8 +221,9 @@
                 :key="variation._id"
                 :value="variation._id"
                 :selected="selectedVariationId === variation._id"
+                :disabled="!variation.quantity || variation.quantity <= 0"
               >
-                {{ variation.name.replace(body.name + ' / ', '').trim() || variation.sku }}
+                {{ variation.specifications ? Object.values(variation.specifications)[0][0].text : variation.sku }}{{ (!variation.quantity || variation.quantity <= 0) ? ' (Indisponível)' : '' }}
               </option>
             </select>
           </div>

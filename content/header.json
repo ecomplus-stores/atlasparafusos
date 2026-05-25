@@ -1,7 +1,14 @@
 {
   "categories_list": {
-    "featured": [],
-    "random": 6,
+    "featured": [
+      "/promocao?Promoção",
+      "/parafusos?Parafusos",
+      "/porcas?Porcas",
+      "/arruelas?Arruelas",
+      "/automotivos?Automotivos",
+      "/fixadores?Fixadores"
+    ],
+    "random": 0,
     "full_width": true
   },
   "menu_all_departments": true,

@@ -1,4 +1,5 @@
 import CartItemMixin from '@ecomplus/storefront-components/src/js/CartItem.js'
+import { gridTitle as getGridTitle } from '@ecomplus/utils'
 import { getProgressiveDiscount } from './helpers/parseProgressiveDiscount'
 
 export default {
@@ -78,6 +79,15 @@ export default {
         })
         .filter(Boolean)
         .sort((a, b) => a.quantity - b.quantity)
+    }
+  },
+
+  methods: {
+    ...CartItemMixin.methods,
+
+    getGridTitle (gridId) {
+      const grids = (window.storefront && window.storefront.data && window.storefront.data.grids) || []
+      return getGridTitle(gridId, grids)
     }
   }
 }

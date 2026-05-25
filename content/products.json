@@ -29,6 +29,9 @@
     {
       "type": "product-specifications",
       "enabled": false
+    },{
+      "type": "product-testimonials",
+      "enabled": true
     }
   ]
 }

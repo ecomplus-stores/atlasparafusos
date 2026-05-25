@@ -1,0 +1,172 @@
+<article class="summary">
+  <h5 class="summary__title">
+    {{ i19summary }}
+  </h5>
+
+  <slot name="list">
+    <div
+      v-if="items"
+      class="summary__list"
+    >
+      <div
+        class="summary__item"
+        v-for="item in items"
+        v-if="item.quantity > 0"
+        :key="item._id"
+      >
+        <a-picture
+          v-if="getImg(item)"
+          :src="getImg(item).url"
+          :alt="getImg(item).alt || item.name"
+        />
+
+        <div>
+          <span class="badge badge-secondary">
+            {{ item.quantity }}
+          </span>
+          <template v-if="Array.isArray(item.flags) && item.flags.includes('freebie')">
+            <s>{{ formatMoney(getPrice(item)) }}</s>
+            <small class="text-muted">
+              <i class="i-gift ml-2 mr-1"></i>
+              {{ i19freebie }}
+            </small>
+          </template>
+          <template v-else>
+            {{ formatMoney(getPrice(item)) }}
+          </template>
+          <br>
+
+          <a-link
+            v-if="item.slug"
+            :href="`/${item.slug}`"
+            target="_blank"
+          >
+            <small>{{ getName(item) }}</small>
+          </a-link>
+          <small v-else>
+            {{ getName(item) }}
+          </small>
+          
+
+        <div
+          v-if="item.specifications && Object.keys(item.specifications).length"
+          class="summary__variations small"
+        >
+          <span
+            v-for="(specs, gridId) in item.specifications"
+            :key="gridId"
+            class="summary-item__variation"
+          >
+            {{ specs[0] && specs[0].text }}            
+          </span>
+        </div>
+          <item-customizations :item="item"/>
+        </div>
+      </div>
+    </div>
+  </slot>
+
+  <slot name="more-offers"/>
+
+  <slot name="amount">
+    <div class="summary__amount">
+      <div
+        class="summary__amount__row"
+        :data-subtotal="amount.subtotal.toFixed(2)"
+      >
+        <span>{{ i19subtotal }}</span>
+        <div>{{ formatMoney(amount.subtotal) }}</div>
+      </div>
+
+      <div
+        class="summary__amount__row"
+        :data-freight="amount.freight.toFixed(2)"
+      >
+        <span>
+          {{ i19freight }}
+          <small v-if="shippingAddress">
+            {{ shippingAddress.street }}
+            <template v-if="shippingAddress.number">
+              {{ shippingAddress.number }}
+            </template>
+            {{ shippingAddress.city }}
+            {{ shippingAddress.province_code }}
+          </small>
+        </span>
+        <div>{{ formatMoney(amount.freight) }}</div>
+      </div>
+
+      <div
+        v-if="amount.discount"
+        class="summary__amount__row"
+        :data-discount="amount.discount.toFixed(2)"
+      >
+        <span>{{ i19discount }}</span>
+        <div>{{ formatMoney(amount.discount) }}</div>
+      </div>
+      <div
+        v-if="amount.balance"
+        class="summary__amount__row"
+        :data-balance="amount.balance.toFixed(2)"
+      >
+        <span>{{ i19balanceOrPoints }}</span>
+        <div>{{ formatMoney(amount.balance) }}</div>
+      </div>
+
+      <div
+        v-if="paidInAdvance > 0"
+        class="summary__amount__row"
+      >
+        <span>{{ i19total }}</span>
+        <div>{{ formatMoney(amount.total) }}</div>
+      </div>
+
+      <slot name="amount-custom"/>
+
+      <div
+        class="summary__amount__row summary__amount__row--total"
+        :data-total="amountToPay.toFixed(2)"
+      >
+        <span>{{ paidInAdvance ? i19toPay : i19total }}</span>
+        <a-prices
+          :product="{ price: amountToPay }"
+          :discount-option="{ value: amount.discount }"
+          :is-literal="true"
+          :is-amount-total="true"
+          :can-show-price-options="canShowPriceOptions"
+        />
+      </div>
+    </div>
+  </slot>
+
+  <slot/>
+
+  <slot name="buyer">
+    <div
+      v-if="buyer"
+      class="summary__buyer"
+    >
+      <h5>{{ i19buyer }}</h5>
+      <p>
+        {{ buyerName }}
+        <br>
+        <small>{{ i19docNumber }}:</small>
+        <span>{{ buyer.doc_number }}</span>
+        <br>
+        <small>{{ i19contactPhone }}:</small>
+        <span>{{ buyerPhone }}</span>
+        <br>
+        <small>{{ buyer.main_email }}</small>
+      </p>
+
+      <button
+        class="btn btn-sm btn-outline-secondary"
+        type="button"
+        @click="$emit('click:account')"
+      >
+        <i class="i-pencil mr-1"></i>
+        {{ i19myAccount }}
+      </button>
+    </div>
+  </slot>
+</article>
