@@ -51,7 +51,7 @@ if (Array.isArray(allCategories) && allCategories.length) {
             class="lozad category-tree__icon"
           >`
       : `<div class="category-tree__placeholder" style="background:hsl(${hue},55%,50%)">${initial}</div>`
-    return `<div class="col-4 col-md-4 col-lg-3 mb-2">
+    return `<div class="col-6 col-md-4 col-lg-3 mb-2">
       <button
         class="category-tree__card d-flex align-items-center w-100"
         onclick="catTreeSelect('${secId}','${cat.slug}','${cat.name}',${level},${isLeaf})"
@@ -139,27 +139,29 @@ if (Array.isArray(allCategories) && allCategories.length) {
   /* ── Responsive ── */
   @media (max-width: 575.98px) {
     .category-tree__card {
-      padding: .4rem;
-      gap: .5rem;
-      flex-direction: column;
+      padding: .25rem;
+      gap:0;
+      // flex-direction: column;
       align-items: center;
       text-align: center;
     }
     .category-tree__img-wrap {
-      width: 48px;
-      height: 48px;
+      width: 36px;
+      height: 36px;
     }
     .category-tree__icon {
-      max-width: 48px;
-      max-height: 48px;
+      max-width: 36px;
+      max-height: 36px;
     }
     .category-tree__placeholder {
-      width: 48px;
-      height: 48px;
-      font-size: 1.2rem;
+width: 36px;
+        height: 36px;
+        font-size: .7rem;
     }
     .category-tree__name {
-      font-size: .75rem;
+      font-size: .7rem;
+      text-align:left;
+              word-break: break-word;
     }
   }
 
