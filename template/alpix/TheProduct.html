@@ -93,7 +93,7 @@
           </div>
 
           <div
-            v-else-if="isWithoutPrice"
+            v-else-if="isWithoutPrice && !hasVariations"
             class="product__without-price"
           >
             <slot name="without-price">
@@ -111,6 +111,7 @@
           <template v-else>
             <slot name="prices">
               <p class="product__prices">
+                
                 <a-prices
                   :product="ghostProductForPrices"
                   :is-literal="true"

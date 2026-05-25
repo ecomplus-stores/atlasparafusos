@@ -211,6 +211,21 @@ export default {
       return !getPrice(this.body)
     },
 
+    minVariationPrice () {
+      if (!this.hasVariations) return 0
+      return this.body.variations.reduce((min, variation) => {
+        const price = variation.price
+        if (price > 0 && (min === 0 || price < min)) {
+          return price
+        }
+        return min
+      }, 0)
+    },
+
+    isFromPrice () {
+      return this.isWithoutPrice && !!this.hasVariations && !this.selectedVariationId && this.minVariationPrice > 0
+    },
+
     isVariationInStock () {
       return checkInStock(this.selectedVariationId ? this.selectedVariation : this.body)
     },
@@ -261,6 +276,9 @@ export default {
       const prices = {}
       ;['price', 'base_price'].forEach(field => {
         let price = this.selectedVariation[field] || this.body[field]
+        if (!price && field === 'price' && this.isFromPrice) {
+          price = this.minVariationPrice
+        }
         if (price !== undefined) {
           this.customizations.forEach(customization => {
             if (customization.add_to_price) {
