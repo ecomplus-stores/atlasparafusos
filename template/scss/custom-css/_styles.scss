@@ -1389,7 +1389,7 @@ body .cart-item {
         border:0;
         label{
           color: #666;
-          float: left;
+          
           font-size: 14px;
           font-weight: 400;
         }
@@ -4288,4 +4288,15 @@ main .header{box-shadow: 0px 0px 0px!important;}
 .summary__variations{
   font-size:12px;
   color:#666
+}
+
+.search-engine__filter:not(:first-child) {
+    margin-top: calc(var(--spacer-2) * 3);
+}
+
+@media(min-width:990px){
+  #search-engine .search-engine__sidebar{
+    max-height: calc(100dvh - 150px);
+    overflow-y: scroll;
+  }
 }
