@@ -18,6 +18,11 @@
           "end": "",
           "img": "/img/uploads/outletdeparafusos.png",
           "mobile_img": "/img/uploads/outletdeparafusosmobile.jpg"
+        },
+        {
+          "start": "",
+          "end": "",
+          "img": "/img/uploads/banner-teste_1600x830.png"
         }
       ]
     },
@@ -47,6 +52,5 @@
       "limit": 12,
       "page": 1
     }
-    
   ]
 }
