@@ -27,7 +27,8 @@
         {
           "start": "",
           "end": "",
-          "img": "/img/uploads/banner-site-retire-na-loja.png"
+          "img": "/img/uploads/banner-site-retire-na-loja.png",
+          "mobile_img": "/img/uploads/banner-site.jpg"
         }
       ]
     },
