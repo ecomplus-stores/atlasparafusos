@@ -174,7 +174,7 @@ export default {
     getPresets (item) {
       const minQnt = item.min_quantity || this.min || 1
       const maxQnt = item.max_quantity !== undefined ? item.max_quantity : (this.max || 9999999)
-      const presetMax = Math.min(maxQnt, Math.max(minQnt + 5, 6))
+      const presetMax = Math.min(maxQnt, Math.max(minQnt + 3, 3))
       const presets = []
       for (let i = minQnt; i <= presetMax; i++) {
         presets.push(i)

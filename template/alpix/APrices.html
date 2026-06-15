@@ -34,6 +34,7 @@
     v-if="typeof priceWithDiscount === 'number' && priceWithDiscount < finalPrice"
     class="prices__discount"
   >
+    
     <template v-if="typeof discountLabel === 'string' && discountLabel">
       <span>
         {{ formatMoney(priceWithDiscount) }}
@@ -54,7 +55,7 @@
 
     <span
       v-if="progressiveDiscount > 0 || paymentDiscountPercentage > 0"
-      class="prices__progressive-tag ml-2"
+      class="prices__progressive-tag ml-0 my-1 d-inline"
       title="Desconto total (progressivo + pagamento)"
     >
       <template v-if="progressiveDiscount > 0 && paymentDiscountPercentage > 0">

@@ -92,7 +92,7 @@
 }
 main .header{
   background: #D41217;
-  --content-max-width: 1240px!important;
+  --content-max-width: 1180px!important;
   span.ico{
       display: block;
       line-height: 0;
@@ -343,6 +343,7 @@ main #search-input{
     }
     .prices__progressive-tag{
       font-size: 12px;
+      white-space:nowrap
     }
   }
   .prices__value{
@@ -483,7 +484,7 @@ body #search-engine{
     #page-categories #content,
     #product{
           .container, .container-lg, .container-md, .container-sm, .container-xl {
-          max-width: 1240px;
+          max-width: 1210px;
       }
     }
 }
@@ -492,7 +493,7 @@ body #search-engine{
 @media (min-width: 1200px) {
   #page-products{
     .container, .container-lg, .container-md, .container-sm, .container-xl {
-        max-width: 1240px;
+        max-width: 1210px;
     }
   }
 }
