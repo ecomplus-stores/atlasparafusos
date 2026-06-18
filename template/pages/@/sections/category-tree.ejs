@@ -11,6 +11,9 @@ try {
 
 if (Array.isArray(allCategories) && allCategories.length) {
   allCategories = allCategories.filter(cat => cat.name != "Ocultar")
+  allCategories = allCategories.slice().sort((a, b) => {
+    return (a.name || '').localeCompare(b.name || '', 'pt-BR', { sensitivity: 'base' })
+  })
   const catByParent = _.lodash.groupBy(allCategories, ({ parent }) => {
     return !parent || !parent.name ? '_' : parent.name
   })
@@ -270,7 +273,7 @@ width: 36px;
       var iconHtml = cat.icon
         ? '<img data-src="' + cat.icon.url + '" alt="' + (cat.icon.alt || cat.name) + '" class="lozad category-tree__icon">'
         : '<div class="category-tree__placeholder" style="background:hsl(' + hue + ',55%,50%)">' + initial + '</div>'
-      return '<div class="col-4 col-md-4 col-lg-3 mb-2">' +
+      return '<div class="col-6 col-md-4 col-lg-3 mb-2">' +
         '<button class="category-tree__card d-flex align-items-center w-100" ' +
           'onclick="catTreeSelect(\'' + secId + '\',\'' + cat.slug + '\',\'' + cat.name + '\',' + level + ',' + isLeaf + ')" ' +
           'type="button" aria-label="' + cat.name + '">' +

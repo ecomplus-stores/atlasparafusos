@@ -294,9 +294,9 @@ const hasAllDepartments = header.menu_all_departments
                   <%= header.name_all_departments || _.dictionary('all') %>
                 </a>
                 <nav class="header__submenu" id="s-all">
-                  <% _.categories.filter(cat => !cat.parent && cat.name != "Ocultar").forEach(({ name, slug, parent, _id }) => { %>
+                  <% _.categories.filter(cat => !cat.parent && cat.name != "Ocultar").sort((a, b) => (a.name || '').localeCompare(b.name || '', 'pt-BR', { sensitivity: 'base' })).forEach(({ name, slug, parent, _id }) => { %>
                     <% if (!parent || !parent.slug) { %>
-                      <% const subcategories = _.categories.filter(({ parent: p }) => p && p.name === name.toUpperCase()) %>
+                      <% const subcategories = _.categories.filter(({ parent: p }) => p && p.name === name.toUpperCase()).sort((a, b) => (a.name || '').localeCompare(b.name || '', 'pt-BR', { sensitivity: 'base' })) %>
                       <div class="header__submenu-item<%= subcategories.length ? ' header__submenu-item--has-children' : '' %>">
                         <a id="sd-all-<%= _id %>" href="/<%= slug %>"><%= name %>
                           <%- subcategories.length ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#000000" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path></svg>' : '' %>
@@ -334,21 +334,17 @@ const hasAllDepartments = header.menu_all_departments
                   
                   <% if (subcategories.length) { %>
                     <%
-                      if (isAlphabeticalOrderSubmenu) {
-                        subcategories.sort((a, b)=> {
-                          return b.name > a.name ? -1 : 1
-                        })
-                      }
+                      subcategories.sort((a, b) => {
+                        return (a.name || '').localeCompare(b.name || '', 'pt-BR', { sensitivity: 'base' })
+                      })
                     %>
                     <nav class="header__submenu" id="<%= `s-${slug.replace(/\//g, '_')}` %>">
                       <% subcategories.forEach(subcategory => { %>
                         <% const thirdCategories = _.categories.filter(({ parent }) => parent && parent.name === subcategory.name.toUpperCase()) %>
                         <%
-                          if (isAlphabeticalOrderSubmenu) {
-                            thirdCategories.sort((a, b)=> {
-                              return b.name > a.name ? -1 : 1
-                            })
-                          }
+                          thirdCategories.sort((a, b) => {
+                            return (a.name || '').localeCompare(b.name || '', 'pt-BR', { sensitivity: 'base' })
+                          })
                         %>
                         <div class="header__submenu-item<%= thirdCategories.length ? ' header__submenu-item--has-children' : '' %>">
                           <a id="sd-<%= subcategory._id %>" href="/<%= subcategory.slug %>"><%= subcategory.name %><%- thirdCategories.length ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#000000" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path></svg>' : '' %></a>
