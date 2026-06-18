@@ -196,7 +196,111 @@ if (stamps && Array.isArray(stamps.stamps_list) && stamps.stamps_list.length) {
   </div>
 </div>
 <script>
+  (function () {
+    // Directional sticky (estilo adidas): o painel acompanha a rolagem e fixa
+    // na BASE ao descer; ao SUBIR ele "solta" e acompanha a página até fixar no
+    // TOPO. position:sticky puro não faz isso (prende só por uma borda), por
+    // isso controlamos manualmente o offset levando a direção em conta.
+    var MOBILE_BREAKPOINT = 990 // abaixo disso, sticky desativado (ver SCSS)
+    var GAP = 20 // respiro abaixo do painel quando fixado pela base
+    var FALLBACK_HEADER_OFFSET = 120
+    var rafId = null
+    var currentTop = null // posição (doc coords) da borda superior do painel
+    var lastScrollTop = window.pageYOffset || 0
 
+    function getHeaderOffset () {
+      var header = document.getElementById('header')
+      return header ? header.offsetHeight + 16 : FALLBACK_HEADER_OFFSET
+    }
+
+    function clearStyles (el) {
+      el.style.position = ''
+      el.style.top = ''
+    }
+
+    function update () {
+      rafId = null
+      var el = document.querySelector('#product-block .sticky-this')
+      if (!el) return
+
+      if (window.innerWidth <= MOBILE_BREAKPOINT) {
+        clearStyles(el)
+        currentTop = null
+        return
+      }
+
+      var parent = el.parentElement
+      var scrollTop = window.pageYOffset || 0
+      var viewportH = window.innerHeight
+      var sidebarH = el.offsetHeight
+      var topSpacing = getHeaderOffset()
+      // ancora no topo da coluna pai (posição estável: o `top` relativo do
+      // filho não desloca o pai). Sem padding vertical no layout atual, a
+      // posição natural do painel coincide com o topo da coluna.
+      var containerTopDoc = parent.getBoundingClientRect().top + scrollTop
+      var containerH = parent.offsetHeight
+
+      // limites: o painel não pode passar do topo nem da base da coluna pai
+      var minTop = containerTopDoc
+      var maxTop = containerTopDoc + containerH - sidebarH
+      if (maxTop < minTop) maxTop = minTop // painel mais alto que a coluna: sem trilho
+
+      var desired
+      if (sidebarH + topSpacing + GAP <= viewportH) {
+        // painel cabe na viewport -> sticky-top simples
+        desired = scrollTop + topSpacing
+      } else {
+        // painel mais alto que a viewport -> direcional
+        if (currentTop === null) currentTop = scrollTop + topSpacing
+        var viewportTop = scrollTop + topSpacing
+        var viewportBottom = scrollTop + viewportH - GAP
+        if (scrollTop > lastScrollTop) {
+          // descendo: fixa pela base quando a borda inferior alcança a base
+          desired = Math.max(currentTop, viewportBottom - sidebarH)
+        } else if (scrollTop < lastScrollTop) {
+          // subindo: solta e fixa pelo topo quando a borda superior o alcança
+          desired = Math.min(currentTop, viewportTop)
+        } else {
+          desired = currentTop
+        }
+      }
+
+      // clamp dentro da coluna
+      if (desired < minTop) desired = minTop
+      if (desired > maxTop) desired = maxTop
+
+      currentTop = desired
+      lastScrollTop = scrollTop
+
+      // usa position:relative + top (NÃO transform) para não criar containing
+      // block que quebraria modais position:fixed dentro do painel (ex: guia de tamanho)
+      el.style.position = 'relative'
+      el.style.top = (currentTop - containerTopDoc) + 'px'
+    }
+
+    function scheduleUpdate () {
+      if (rafId !== null) return
+      rafId = window.requestAnimationFrame(update)
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', scheduleUpdate)
+    } else {
+      scheduleUpdate()
+    }
+    window.addEventListener('scroll', scheduleUpdate, { passive: true })
+    window.addEventListener('resize', scheduleUpdate)
+    window.addEventListener('load', scheduleUpdate)
+
+    // o conteúdo do painel hidrata de forma assíncrona (TheProduct: preço,
+    // variações, etc.), então recalcula sempre que sua altura mudar
+    if (window.ResizeObserver) {
+      var target = document.querySelector('#product-block .sticky-this')
+      if (target) {
+        new ResizeObserver(scheduleUpdate).observe(target)
+      }
+    }
+  })()
 </script>
 <%
 const productJsonLd = {

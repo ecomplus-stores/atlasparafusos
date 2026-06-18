@@ -1254,7 +1254,7 @@ body .cart-item {
   .sticky-this{
     border-left: 1px solid #f2f2f2;
     position: sticky;
-    top: 120px;
+    top: 120px; // fallback; ajustado dinamicamente via JS (stick-to-bottom)
     padding-left: 2rem;
   }
 }
