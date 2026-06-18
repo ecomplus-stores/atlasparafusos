@@ -263,6 +263,7 @@
               </label>
               <div class="product-card__price-display">
                 <div class="product-card__unit-price">
+                  <small v-if="isFromTablePrice" class="product-card__from-label">a partir de</small>
                   {{ formatMoney(currentTablePrice) }} /un.
                 </div>
                 <div class="product-card__total-price">

@@ -120,15 +120,23 @@ export default {
       return !getPrice(this.body)
     },
 
-    minVariationPrice () {
-      if (!this.body.variations || !this.body.variations.length) return 0
-      return this.body.variations.reduce((min, variation) => {
-        const price = variation.price
-        if (price > 0 && (min === 0 || price < min)) {
-          return price
+    minPriceVariation () {
+      if (!this.body.variations || !this.body.variations.length) return null
+      return this.body.variations.reduce((cheapest, variation) => {
+        const price = getPrice(variation)
+        if (price > 0 && (!cheapest || price < getPrice(cheapest))) {
+          return variation
         }
-        return min
-      }, 0)
+        return cheapest
+      }, null)
+    },
+
+    minVariationPrice () {
+      return this.minPriceVariation ? getPrice(this.minPriceVariation) : 0
+    },
+
+    tableBaseProduct () {
+      return this.selectedVariation || this.minPriceVariation || this.body
     },
 
     isFromPrice () {
@@ -204,18 +212,23 @@ export default {
     },
 
     currentFlags () {
-      // Prioriza flags da variação selecionada, senão usa flags do produto
-      const variation = this.selectedVariation
+      // Prioriza flags da variação selecionada; sem seleção, usa a variação de menor preço
+      const variation = this.selectedVariation || this.minPriceVariation
       if (variation && variation.flags && Array.isArray(variation.flags) && variation.flags.length > 0) {
         return variation.flags
       }
       return this.body.flags || []
     },
 
+    isFromTablePrice () {
+      // Sem variação selecionada mas com variações, exibimos o menor preço ("a partir de")
+      return !this.selectedVariationId && !!this.minPriceVariation
+    },
+
     progressivePriceTiers () {
       const tiers = []
       const flags = this.currentFlags
-      const selectedProduct = this.selectedVariation || this.body
+      const selectedProduct = this.tableBaseProduct
       const basePrice = getPrice(selectedProduct)
       
       // Always include base price (qty=1)
@@ -255,16 +268,16 @@ export default {
     },
 
     currentTablePrice () {
+      const basePrice = getPrice(this.tableBaseProduct)
       const discount = getProgressiveDiscount(this.currentFlags, this.tableQty)
       if (discount) {
-        const basePrice = getPrice(this.selectedVariation || this.body)
         if (discount.type === '%') {
           return basePrice * (1 - discount.value / 100)
         } else if (discount.type === '$') {
           return Math.max(0, basePrice - discount.value)
         }
       }
-      return getPrice(this.selectedVariation || this.body)
+      return basePrice
     },
 
     currentTableTotal () {
