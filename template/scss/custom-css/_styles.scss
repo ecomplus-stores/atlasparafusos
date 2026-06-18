@@ -1501,7 +1501,7 @@ body #search-engine article>.row>div .product-card.product-card--table {
     font-size: 0.8rem;
 
     &--code {
-      
+      display:none;
       flex: 0 0 60px;
       font-size: .75rem;
       font-weight: 600;
@@ -1611,6 +1611,7 @@ body #search-engine article>.row>div .product-card.product-card--table {
 
     // Top row: image + code + name side by side
     .product-card__table-cell--code {
+      display:none;
       order: 1;
       flex: 0 0 auto;
       font-size: 0.6rem;
