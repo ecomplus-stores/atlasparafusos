@@ -37,7 +37,8 @@
       "limit": 12,
       "page": 1,
       "collection_id": "6a10d44f568e833125eade31:categories:PARAFUSO ALLEN:/parafuso-allen",
-      "sort": "sales"
+      "sort": "sales",
+      "autoplay": 300
     },
     {
       "type": "collection-shelf",
