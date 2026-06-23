@@ -43,7 +43,8 @@
       "shuffle": false,
       "limit": 12,
       "page": 1,
-      "collection_id": "6a10d538568e833125eae010:categories:REBATER:/rebater"
+      "collection_id": "6a10d538568e833125eae010:categories:REBATER:/rebater",
+      "autoplay": 300
     },
     {
       "type": "collection-shelf",
