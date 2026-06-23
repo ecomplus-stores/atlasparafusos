@@ -39,7 +39,7 @@
       "page": 1,
       "collection_id": "6a10d44f568e833125eade31:categories:PARAFUSO ALLEN:/parafuso-allen",
       "sort": "sales",
-      "autoplay": 300
+      "autoplay": 3000
     },
     {
       "type": "collection-shelf",
@@ -47,7 +47,7 @@
       "limit": 12,
       "page": 1,
       "collection_id": "6a10d538568e833125eae010:categories:REBATER:/rebater",
-      "autoplay": 300
+      "autoplay": 3000
     },
     {
       "type": "collection-shelf",
