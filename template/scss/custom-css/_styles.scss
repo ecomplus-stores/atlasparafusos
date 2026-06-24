@@ -376,7 +376,18 @@ main #search-input{
 body:not(#page-home){
 
 }
-
+.products-carousel .glide__slides{
+  padding:1rem 0
+}
+.product-card{
+  border:1px solid transparent;
+  transition: all .2s ease-in-out;
+  border-radius:1rem
+}
+.product-card:hover{
+  box-shadow: 0 6px 16px 0 #d412185f;
+  border:1px solid #d41217
+}
 #search-engine{
   article > .row{
     margin: 0 -5px;
@@ -389,7 +400,8 @@ body:not(#page-home){
       box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .12);
       }
       .product-card:hover{
-        box-shadow: 0 6px 16px 0 rgba(0, 0, 0, .1);
+        box-shadow: 0 6px 16px 0 #d412185f;
+        border:1px solid #d41217
       }
     }
   }  
@@ -3378,8 +3390,9 @@ button.close{
         translate: -50% 0;
         .glide__arrows{
           width: 95dvw;
+          max-width:1240px;
           position: absolute;
-          top: calc(50% - 2rem);
+          top: calc(50% - 5rem);
           left: 50%;
           bottom: 0;
           translate: -50% -50%;
@@ -4343,5 +4356,38 @@ main .header{box-shadow: 0px 0px 0px!important;}
 
 .list-group-item.active{
       background: #D41217;
+
+}
+
+.whatsapp-float{
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1030;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #25d366;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+  transition: transform .15s ease;
+
+  &:hover{ transform: scale(1.08); }
+}
+
+.banner-slider .glide__arrow{
+  background:transparent;
+  width:42px;
+  height:42px;
   
+}
+.banner-slider{
+  .glide__arrow--left{
+    left:.75rem;
+  }
+  .glide__arrow--right{
+    right:.75rem;
+  }
 }
