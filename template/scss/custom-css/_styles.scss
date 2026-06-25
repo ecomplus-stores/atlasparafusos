@@ -4391,3 +4391,13 @@ main .header{box-shadow: 0px 0px 0px!important;}
     right:.75rem;
   }
 }
+
+.banner-slider .glide__arrows{
+  opacity:0;
+  transition: opacity .2s ease-in-out;
+}
+.banner-slider:hover{
+  .glide__arrows{
+    opacity: 1;
+  }
+}
