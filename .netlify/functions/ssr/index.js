@@ -4,10 +4,10 @@ process.env.NODE_ENV = 'production'
 process.env.STOREFRONT_BASE_DIR = __dirname
 process.env.STOREFRONT_BUNDLES_PATH = path.join(`${__dirname}/bundles.json`)
 
-exports.handler = (ev, context, callback) => {
+exports.handler = (ev) => new Promise((resolve) => {
   if (/^\/(storefront|checkout)\.[^.]+\.(js|css)$/.test(ev.path)) {
     const [filename, , ext] = ev.path.split('.')
-    return callback(null, {
+    return resolve({
       statusCode: 301,
       headers: {
         Location: `${filename}.${ext}`
@@ -16,7 +16,7 @@ exports.handler = (ev, context, callback) => {
   }
 
   if (/\.(js|css|ico|png|gif|jpg|jpeg|webp|svg|woff|woff2|otf|ttf|eot)$/.test(ev.path)) {
-    return callback(null, {
+    return resolve({
       statusCode: 404,
       headers: {
         'Cache-Control': 'public, max-age=300, s-maxage=180'
@@ -41,15 +41,15 @@ exports.handler = (ev, context, callback) => {
       return res
     },
     end () {
-      callback(null, { statusCode, headers })
+      resolve({ statusCode, headers })
       return res
     },
     send (body) {
-      callback(null, { statusCode, headers, body })
+      resolve({ statusCode, headers, body })
       return res
     }
   }
 
   const { ssr } = require('@ecomplus/storefront-renderer/functions/')
   ssr(req, res)
-}
+})
