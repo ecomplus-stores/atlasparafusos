@@ -1,0 +1,37 @@
+{
+  "icons": [
+    {
+      "src": "/icon_512x512.b573f0d42e03b7fd68340976e44e9b6a.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon_384x384.6019da7c7a3e324a414284669a087238.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon_192x192.43383435bb97c968927a715e1ee96dc3.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon_128x128.02554b9cdec7e4558a5f5baddec40971.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon_96x96.3b6d01771574a489cd82a1e846f21e66.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    }
+  ],
+  "name": "Atlas Parafusos",
+  "short_name": "Atlas Parafusos",
+  "orientation": "portrait",
+  "display": "standalone",
+  "start_url": ".",
+  "description": "Atlas Parafusos, loja física desde 1999. Atua no Ramo de Parafusos e Ferramentas Especiais para industrias, construção civil, indústria alimentíci...",
+  "background_color": "#ffffff",
+  "theme_color": "#131313"
+}
